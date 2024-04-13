@@ -72,3 +72,6 @@ target/
 # pyenv
 .python-version
 
+# pdm
+.pdm-python
+src/pytest_amaranth_sim/version.txt

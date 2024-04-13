@@ -14,16 +14,24 @@ jobs:
     strategy:
       matrix:
         include:
-          - python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', 'pypy-3.8']
+          - python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: pdm-project/setup-pdm@v4
         with:
           python-version: ${{ matrix.python-version }}
+          cache: true
 
-      - name: Install tox
-        run: pip install tox
+      - name: Install PDM dependencies
+        run: pdm install --dev
 
-      - name: Test
-        run: tox -e py
+      - name: Run tests
+        run: pdm run test --exitfirst
+
+      # If we publish under pytest-dev (unlikely), tox will be required.
+      # - name: Install tox
+      #   run: pip install tox
+
+      # - name: Test
+      #   run: tox -e py
