@@ -31,9 +31,13 @@ classifiers = [
 ]
 dependencies = [
     "pytest>=6.2.0",
-    "amaranth>=0.4.5",
+    "amaranth @ git+https://github.com/amaranth-lang/amaranth",
 ]
 dynamic = ["version"]
+
+[tool.pytest.ini_options]
+addopts="--ignore=examples"
+pytester_example_dir = "examples"
 
 [project.urls]
 Repository = "https://github.com/cr1901/pytest-amaranth-sim"
