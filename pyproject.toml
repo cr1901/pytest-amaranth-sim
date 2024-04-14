@@ -31,7 +31,7 @@ classifiers = [
 ]
 dependencies = [
     "pytest>=6.2.0",
-    "amaranth @ git+https://github.com/amaranth-lang/amaranth",
+    "amaranth>=0.5.dev",
 ]
 dynamic = ["version"]
 
@@ -47,6 +47,13 @@ amaranth-sim = "pytest_amaranth_sim.plugin"
 [tool.pdm.version]
 source = "scm"
 write_to = "pytest_amaranth_sim/version.txt"
+
+[tool.pdm.resolution]
+respect-source-order = true
+
+[[tool.pdm.source]]
+name = "test"
+url = "https://test.pypi.org/simple/"
 
 [tool.pdm.scripts]
 test = { cmd = "pytest", help="run tests" }
