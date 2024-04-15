@@ -1,3 +1,4 @@
+# amaranth: UnusedElaboratable=no
 """Basic test of amaranth sim pytest plugin using a dummy multiplier."""
 
 import pytest
