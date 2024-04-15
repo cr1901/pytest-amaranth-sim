@@ -10,7 +10,7 @@ def test_sim_mod_fixture(pytester):
 
     # fnmatch_lines does an assertion internally
     result.stdout.fnmatch_lines([
-        '*::test_basic PASSED*',
+        '*::test_basic[[]*[]] PASSED*',
     ])
 
     # make sure that we get a '0' exit code for the testsuite
@@ -35,7 +35,7 @@ def test_help_message(pytester):
     ])
 
 
-def test_vcd_generation(pytester):
+def test_vcd_generation(pytester, file_exists):
     """Make sure that VCD files get generated."""
     pytester.copy_example("test_mul.py")
 
@@ -44,17 +44,17 @@ def test_vcd_generation(pytester):
 
     # fnmatch_lines does an assertion internally
     result.stdout.fnmatch_lines([
-        '*::test_basic PASSED*',
+        '*::test_basic[[]*[]] PASSED*',
     ])
 
     # make sure that we get a '0' exit code for the testsuite
     assert result.ret == 0
 
-    assert (pytester.path / "test_basic.vcd").exists()
-    assert (pytester.path / "test_basic.gtkw").exists()
+    assert file_exists("test_basic[[]*[]].vcd")
+    assert file_exists("test_basic[[]*[]].gtkw")
 
 
-def test_long_vcd_generation(pytester):
+def test_long_vcd_generation(pytester, file_exists):
     """Make sure that VCD files with extended filenames get generated."""
     pytester.makeini("""
         [pytest]
@@ -67,11 +67,11 @@ def test_long_vcd_generation(pytester):
 
     # fnmatch_lines does an assertion internally
     result.stdout.fnmatch_lines([
-        '*::test_basic PASSED*',
+        '*::test_basic[[]*[]] PASSED*',
     ])
 
     # make sure that we get a '0' exit code for the testsuite
     assert result.ret == 0
 
-    assert (pytester.path / "test_basic-test_mul.vcd").exists()
-    assert (pytester.path / "test_basic-test_mul.gtkw").exists()
+    assert file_exists("test_basic[[]*[]]-test_mul.vcd")
+    assert file_exists("test_basic[[]*[]]-test_mul.gtkw")

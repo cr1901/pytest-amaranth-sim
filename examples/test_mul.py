@@ -1,8 +1,9 @@
 """Basic test of amaranth sim pytest plugin using a dummy multiplier."""
 
 import pytest
-from amaranth.sim import Tick
+from amaranth.sim import Tick, Delay
 from amaranth import Elaboratable, Signal, Module
+from dataclasses import dataclass
 
 
 class Mul(Elaboratable):
@@ -26,16 +27,32 @@ class Mul(Elaboratable):
         return m
 
 
-@pytest.fixture
-def mul_tb(sim_mod):
+@dataclass
+class MulTbArgs:
+    a_in: int = 1
+    b_in: int = 2
+    o_out: int = 2
+
+
+@pytest.fixture(params=[pytest.param(MulTbArgs(), id="default")],)
+def mul_tb(sim_mod, request):
     def testbench():
         _, m = sim_mod
 
-        yield m.a.eq(1)
-        yield m.b.eq(2)
-        yield Tick()
+        if m.registered:
+            yield Tick()
+        else:
+            yield Delay(0.1)
 
-        assert (yield m.o) == 2
+        yield m.a.eq(request.param.a_in)
+        yield m.b.eq(request.param.b_in)
+
+        if m.registered:
+            yield Tick()
+        else:
+            yield Delay(0.1)
+
+        assert (yield m.o) == request.param.o_out
 
     return testbench
 
