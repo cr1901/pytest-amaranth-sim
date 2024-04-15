@@ -166,10 +166,8 @@ def test_comb_testbench_fail(pytester, file_exists):
         from test_mul import Mul
 
         # This should raise an exception when creating the sim fixture.
-        @pytest.mark.module(Mul(registered=False))
-        @pytest.mark.clks((1.0 / 12e6,))
-        def test_comb_tb_with_clock(sim_mod, mul_tb):
-            sim, _ = sim_mod
+        @pytest.mark.parametrize("mod,clks", [(Mul(registered=False), 1.0 / 12e6)])
+        def test_comb_tb_with_clock(sim, mul_tb):
             sim.run(testbenches=[mul_tb])
     """
     )

@@ -36,9 +36,9 @@ class MulTbArgs:
 
 
 @pytest.fixture(params=[pytest.param(MulTbArgs(), id="default")],)
-def mul_tb(sim_mod, request):
+def mul_tb(mod, request):
     def testbench():
-        _, m = sim_mod
+        m = mod
 
         if m.registered:
             yield Tick()
@@ -58,60 +58,48 @@ def mul_tb(sim_mod, request):
     return testbench
 
 
-@pytest.mark.module(Mul())
-@pytest.mark.clks((1.0 / 12e6,))
-def test_basic(sim_mod, mul_tb):
-    sim, _ = sim_mod
+@pytest.mark.parametrize("mod,clks", [(Mul(), 1.0 / 12e6)])
+def test_basic(sim, mul_tb):
     sim.run(testbenches=[mul_tb])
 
 
-@pytest.mark.module(Mul())
-@pytest.mark.clks((1.0 / 12e6,))
 @pytest.mark.parametrize(
-    "mul_tb", [pytest.param(MulTbArgs(a_in=2, o_out=4), id="alt")],
-    indirect=True
+    "mod,clks,mul_tb", [
+        pytest.param(Mul(), 1.0 / 12e6, MulTbArgs(a_in=2, o_out=4), id="alt")
+    ], indirect=["mul_tb"]
 )
-def test_alternate_inputs(sim_mod, mul_tb):
-    sim, _ = sim_mod
+def test_alternate_inputs(sim, mul_tb):
     sim.run(testbenches=[mul_tb])
 
 
-@pytest.mark.module.with_args(Mul)
-@pytest.mark.clks((1.0 / 12e6,))
 @pytest.mark.parametrize(
-    "sim_mod,expectation", [
-        (((), dict(width=1)), pytest.raises(AssertionError)),
-        (((), dict(width=6)), does_not_raise())
-    ], indirect=["sim_mod"]
+    "mod,clks,expectation", [
+        (Mul(width=1), 1.0 / 12e6, pytest.raises(AssertionError)),
+        (Mul(width=6), 1.0 / 12e6,  does_not_raise())
+    ]
 )
-def test_alternate_width(sim_mod, mul_tb, expectation):
-    sim, _ = sim_mod
+def test_alternate_width(sim, mul_tb, expectation):
     with expectation:
         sim.run(testbenches=[mul_tb])
 
 
-@pytest.mark.module.with_args(Mul)
-@pytest.mark.clks((1.0 / 12e6,))
 @pytest.mark.parametrize(
-    "sim_mod,mul_tb", [
-        (((), dict(width=1)), MulTbArgs(b_in=1, o_out=1)),
-        (((), dict(width=6)), MulTbArgs(a_in=16, b_in=16, o_out=256))
-    ], indirect=True
+    "mod,clks,mul_tb", [
+        (Mul(width=1), 1.0 / 12e6, MulTbArgs(b_in=1, o_out=1)),
+        (Mul(width=6), 1.0 / 12e6, MulTbArgs(a_in=16, b_in=16, o_out=256))
+    ], indirect=["mul_tb"]
 )
-def test_alternate_width_and_inputs(sim_mod, mul_tb):
-    sim, _ = sim_mod
+def test_alternate_width_and_inputs(sim, mul_tb):
     sim.run(testbenches=[mul_tb])
 
 
-@pytest.mark.module.with_args(Mul)
 @pytest.mark.parametrize(
-    "sim_mod,expectation", [
-        pytest.param(((), dict(registered=True)), does_not_raise(),
+    "mod,expectation", [
+        pytest.param(Mul(registered=True), does_not_raise(),
                      marks=pytest.mark.skip(reason="infinitely loops")),
-        (((), dict(registered=False)), does_not_raise())
-    ], indirect=["sim_mod"]
-)
-def test_comb_tb(sim_mod, mul_tb, expectation):
-    sim, _ = sim_mod
+        (Mul(registered=False), does_not_raise())
+    ])
+@pytest.mark.parametrize("clks", [None])  # This is the default.
+def test_comb_tb(sim, mul_tb, expectation):
     with expectation:
         sim.run(testbenches=[mul_tb])

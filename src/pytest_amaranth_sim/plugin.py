@@ -1,6 +1,7 @@
 """Main module for amaranth simulator pytest plugin."""
 
 import pytest
+from amaranth import Elaboratable
 from amaranth.sim import Simulator
 
 
@@ -19,35 +20,19 @@ def pytest_addoption(parser):
     )
 
 
-def pytest_configure(config):
-    # register an additional marker
-    config.addinivalue_line(
-        "markers",
-        "clks(freq): clock frequency of \"sync\" domain to register "
-        "for simulator."
-    )
-    config.addinivalue_line(
-        "markers",
-        "module(name): top-level module to simulate."
-    )
+def pytest_make_parametrize_id(config, val, argname):
+    if isinstance(val, float) and argname in ("clks"):
+        return f"{1/val/1000000:04.2f}"
+    if isinstance(val, Elaboratable) and argname in ("mod"):
+        return val.__class__.__name__.lower()
+    else:
+        return None
 
 
 class SimulatorFixture:
-    def __init__(self, req, cfg):
-        mod = req.node.get_closest_marker("module").args[0]
-
-        # If sim_mod fixture was called indirect, assume that we were passed
-        # a class, e.g. @pytest.mark.module.with_args(MyElaboratable). Extract
-        # constructor args from the @pytest.mark.parameterize call.
-        # This allows parameterizing a single Elaboratable within the framework
-        # of pytest.
-        if hasattr(req, "param"):
-            args, kwargs = req.param
-            self.mod = mod(*args, **kwargs)
-        # Otherwise, assume we have an instance of Elaboratable, and pass that
-        # directly to pysim. E.g. @pytest.mark.module(MyElaboratable())
-        else:
-            self.mod = mod
+    def __init__(self, mod, clks, req, cfg):
+        self.mod = mod
+        self.clks = clks
 
         if cfg.getini("long_vcd_filenames"):
             self.name = req.node.name + "-" + req.module.__name__
@@ -60,9 +45,15 @@ class SimulatorFixture:
         clks = req.node.get_closest_marker("clks")
         # There might not be clocks, but if there are, specify them with
         # @pytest.mark.
-        if clks:
-            for clk in clks.args[0]:
-                self.sim.add_clock(clk)
+        if self.clks:
+            if isinstance(self.clks, float):
+                self.sim.add_clock(self.clks)
+            elif isinstance(self.clks, dict):
+                raise NotImplementedError("simulation for domains besides sync is not yet supported")
+                # for domain, clk in clks.iter():
+                #     pass
+            else:
+                raise ValueError(f"clks should be a float or dict of floats, not {type(self.clks)}")
 
     def run(self, testbenches=[], processes=[]):
         for t in testbenches:
@@ -79,6 +70,16 @@ class SimulatorFixture:
 
 
 @pytest.fixture
-def sim_mod(request, pytestconfig):
-    simfix = SimulatorFixture(request, pytestconfig)
-    return (simfix, simfix.mod)
+def mod():
+    raise pytest.UsageError("User must override `mod` fixture in test- see: https://docs.pytest.org/en/stable/how-to/fixtures.html#override-a-fixture-with-direct-test-parametrization")
+
+
+@pytest.fixture
+def sim(mod, clks, request, pytestconfig):
+    simfix = SimulatorFixture(mod, clks, request, pytestconfig)
+    return simfix
+
+
+@pytest.fixture(ids="")
+def clks():
+    return None
