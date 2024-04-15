@@ -4,6 +4,7 @@ import pytest
 from amaranth.sim import Tick, Delay
 from amaranth import Elaboratable, Signal, Module
 from dataclasses import dataclass
+from contextlib import nullcontext as does_not_raise
 
 
 class Mul(Elaboratable):
@@ -62,3 +63,55 @@ def mul_tb(sim_mod, request):
 def test_basic(sim_mod, mul_tb):
     sim, _ = sim_mod
     sim.run(testbenches=[mul_tb])
+
+
+@pytest.mark.module(Mul())
+@pytest.mark.clks((1.0 / 12e6,))
+@pytest.mark.parametrize(
+    "mul_tb", [pytest.param(MulTbArgs(a_in=2, o_out=4), id="alt")],
+    indirect=True
+)
+def test_alternate_inputs(sim_mod, mul_tb):
+    sim, _ = sim_mod
+    sim.run(testbenches=[mul_tb])
+
+
+@pytest.mark.module.with_args(Mul)
+@pytest.mark.clks((1.0 / 12e6,))
+@pytest.mark.parametrize(
+    "sim_mod,expectation", [
+        (((), dict(width=1)), pytest.raises(AssertionError)),
+        (((), dict(width=6)), does_not_raise())
+    ], indirect=["sim_mod"]
+)
+def test_alternate_width(sim_mod, mul_tb, expectation):
+    sim, _ = sim_mod
+    with expectation:
+        sim.run(testbenches=[mul_tb])
+
+
+@pytest.mark.module.with_args(Mul)
+@pytest.mark.clks((1.0 / 12e6,))
+@pytest.mark.parametrize(
+    "sim_mod,mul_tb", [
+        (((), dict(width=1)), MulTbArgs(b_in=1, o_out=1)),
+        (((), dict(width=6)), MulTbArgs(a_in=16, b_in=16, o_out=256))
+    ], indirect=True
+)
+def test_alternate_width_and_inputs(sim_mod, mul_tb):
+    sim, _ = sim_mod
+    sim.run(testbenches=[mul_tb])
+
+
+@pytest.mark.module.with_args(Mul)
+@pytest.mark.parametrize(
+    "sim_mod,expectation", [
+        pytest.param(((), dict(registered=True)), does_not_raise(),
+                     marks=pytest.mark.skip(reason="infinitely loops")),
+        (((), dict(registered=False)), does_not_raise())
+    ], indirect=["sim_mod"]
+)
+def test_comb_tb(sim_mod, mul_tb, expectation):
+    sim, _ = sim_mod
+    with expectation:
+        sim.run(testbenches=[mul_tb])
