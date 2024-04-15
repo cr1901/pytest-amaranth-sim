@@ -21,9 +21,12 @@ def pytest_addoption(parser):
 
 
 def pytest_make_parametrize_id(config, val, argname):
-    if isinstance(val, float) and argname in ("clks"):
-        return f"{1/val/1000000:04.2f}"
-    if isinstance(val, Elaboratable) and argname in ("mod"):
+    if argname in ("clks"):
+        if isinstance(val, float):
+            return f"{1/val/1000000:04.2f}"
+        else:
+            return "comb"
+    elif isinstance(val, Elaboratable) and argname in ("mod"):
         return val.__class__.__name__.lower()
     else:
         return None
@@ -80,6 +83,6 @@ def sim(mod, clks, request, pytestconfig):
     return simfix
 
 
-@pytest.fixture(ids="")
+@pytest.fixture()
 def clks():
     return None

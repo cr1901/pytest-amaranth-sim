@@ -136,7 +136,56 @@ def test_parameterized_testbench_and_module(pytester, file_exists):
     assert not file_exists("*.gtkw")
 
 
-def test_comb_testbench(pytester, file_exists):
+def test_collect(pytester, file_exists):
+    """Test how pytest names tests with our hook and id functions"""
+    pytester.copy_example("test_mul.py")
+
+    pytester.makepyfile(
+        """
+        # amaranth: UnusedElaboratable=no
+        import pytest
+        from test_mul import Mul
+
+        class MyMul(Mul):
+            pass
+
+        @pytest.fixture(params=[0,1,2])
+        def my_mul_tb(request):
+            pass
+
+        @pytest.mark.parametrize("mod,clks", [pytest.param(MyMul(), 1.0 / 13.33e6)])
+        def test_naming(sim, my_mul_tb):
+            sim.run(testbenches=[my_mul_tb])
+
+        @pytest.mark.parametrize("mod,clks,my_mul_tb", [pytest.param(MyMul(), 1.0 / 13.33e6, 3)])
+        def test_naming_extra(sim, my_mul_tb):
+            sim.run(testbenches=[my_mul_tb])
+    """
+    )
+
+    result = pytester.runpytest("-v", "--co")
+
+    assert result.ret == 0
+    result.stdout.fnmatch_lines([
+        "*test_naming[[]0-mymul-13.33[]]*",
+        "*test_naming[[]1-mymul-13.33[]]*",
+        "*test_naming[[]2-mymul-13.33[]]*",
+        "*test_naming_extra[[]mymul-13.33-3[]]*",
+        "*test_basic[[]1-2-mul-12.00[]]*",
+        "*test_alternate_inputs[[]alt-mul[]]*",
+        "*test_alternate_width[[]1-2-mul-12.00-fail[]]*",
+        "*test_alternate_width[[]1-2-mul-12.00-pass[]]*",
+        "*test_alternate_width_and_inputs[[]mul-12.00-1-1[]]*",
+        "*test_alternate_width_and_inputs[[]mul-12.00-16-16[]]*",
+        "*test_comb_tb[[]1-2-comb-reg-mul[]]*",
+        "*test_comb_tb[[]1-2-comb-mul-pass[]]*",
+    ])
+
+    assert not file_exists("*.vcd")
+    assert not file_exists("*.gtkw")
+
+# Below this line, we _want_ these tests to fail!
+def test_comb_testbench_fail(pytester, file_exists):
     """Test combinational and sync testbenches without clks decorator."""
     pytester.copy_example("test_mul.py")
 
@@ -155,30 +204,28 @@ def test_comb_testbench(pytester, file_exists):
     assert file_exists("test_comb_tb[[]*[]].gtkw")
 
 
-# This one's special... we _want_ this one to fail!
-def test_comb_testbench_fail(pytester, file_exists):
+def test_user_forgot_override_mod(pytester, file_exists):
     """Test combinational testbench with clks decorator."""
     pytester.copy_example("test_mul.py")
 
     pytester.makepyfile(
         """
         import pytest
-        from test_mul import Mul
 
         # This should raise an exception when creating the sim fixture.
-        @pytest.mark.parametrize("mod,clks", [(Mul(registered=False), 1.0 / 12e6)])
-        def test_comb_tb_with_clock(sim, mul_tb):
+        @pytest.mark.parametrize("clks", [1.0 / 12e6])
+        def test_missing_mod(sim, mul_tb):
             sim.run(testbenches=[mul_tb])
     """
     )
 
-    result = pytester.runpytest("-v", "-k", "test_comb_tb_with_clock")
+    result = pytester.runpytest("-v", "-k", "test_missing_mod")
 
     assert result.ret == 1
     result.stdout.fnmatch_lines([
-        "*ValueError: Domain * is not present in simulation",
-        "ERROR*::test_comb_tb_with_clock*"
+        "*UsageError: User must override `mod` fixture in test*",
+        "ERROR*::test_missing_mod*"
     ])
 
-    assert not file_exists("test_comb_tb_with_clock.vcd")
-    assert not file_exists("test_comb_tb_with_clock.gtkw")
+    assert not file_exists("*.vcd")
+    assert not file_exists("*.gtkw")
