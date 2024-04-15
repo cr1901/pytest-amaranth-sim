@@ -35,7 +35,7 @@ the coverage at least stays the same before you submit a pull request.
 
 ## License
 
-Distributed under the terms of the [BSD-3] license, "pytest-amaranth-sim" is free and open source software
+Distributed under the terms of the [BSD-2] license, "pytest-amaranth-sim" is free and open source software
 
 ## Issues
 
@@ -43,7 +43,7 @@ If you encounter any problems, please [file an issue] along with a detailed desc
 
 [@hackebrot]: https://github.com/hackebrot
 [apache software license 2.0]: https://www.apache.org/licenses/LICENSE-2.0
-[bsd-3]: https://opensource.org/licenses/BSD-3-Clause
+[bsd-3]: https://opensource.org/licenses/BSD-2-Clause
 [cookiecutter]: https://github.com/audreyr/cookiecutter
 [cookiecutter-pytest-plugin]: https://github.com/pytest-dev/cookiecutter-pytest-plugin
 [file an issue]: https://github.com/cr1901/pytest-amaranth-sim/issues

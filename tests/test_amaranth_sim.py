@@ -158,7 +158,6 @@ def test_comb_testbench(pytester, file_exists):
 # This one's special... we _want_ this one to fail!
 def test_comb_testbench_fail(pytester, file_exists):
     """Test combinational testbench with clks decorator."""
-
     pytester.copy_example("test_mul.py")
 
     pytester.makepyfile(
