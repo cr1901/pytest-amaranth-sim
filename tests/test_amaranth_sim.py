@@ -1,5 +1,7 @@
 """amaranth-sim tests module."""
 
+from itertools import zip_longest
+from vcd.reader import tokenize, TokenKind
 
 def test_sim_mod_fixture(pytester, file_exists):
     """Make sure that pytest accepts our fixture."""
@@ -229,3 +231,60 @@ def test_user_forgot_override_mod(pytester, file_exists):
 
     assert not file_exists("*.vcd")
     assert not file_exists("*.gtkw")
+
+
+def test_vcd_not_truncated(pytester, file_exists, monkeypatch):
+    """Test that VCD files are not truncated on assertion failure."""
+    pytester.makepyfile(
+        """
+        # amaranth: UnusedElaboratable=no
+        import pytest
+        from amaranth import Module, Signal
+        from amaranth.sim import Tick
+
+        m = Module()
+        a = Signal(4)
+        b = Signal()
+
+        m.d.comb += b.eq(a == 15)
+        m.d.sync += a.eq(a + 1)
+
+        @pytest.fixture(params=[pytest.param(False, id="good"), pytest.param(True, id="bad")])
+        def my_tb(request):
+            def testbench():
+                fail_it = request.param
+                for _ in range(16):
+                    yield Tick()
+
+                if fail_it:
+                    assert False
+
+            return testbench
+
+        @pytest.mark.parametrize("mod,clks", [pytest.param(m, 1.0 / 12e6, id="sync")])
+        def test_vcd_truncation(sim, my_tb):
+            sim.run(testbenches=[my_tb])
+    """
+    )
+
+    result = pytester.runpytest("-v", "--vcds")
+
+    assert result.ret == 1
+
+    assert file_exists("test_vcd_truncation[[]good-sync[]].vcd")
+    assert file_exists("test_vcd_truncation[[]good-sync[]].gtkw")
+    assert file_exists("test_vcd_truncation[[]bad-sync[]].vcd")
+    assert file_exists("test_vcd_truncation[[]bad-sync[]].gtkw")
+
+    with open("test_vcd_truncation[good-sync].vcd", "rb") as gfp, \
+         open("test_vcd_truncation[bad-sync].vcd", "rb") as bfp:
+        good_tokens = tokenize(gfp)
+        bad_tokens = tokenize(bfp)
+
+        for gt, bt in zip_longest(good_tokens, bad_tokens):
+            # Doubt the VCDs will be generated at the exact same time down
+            # to the microsecond...
+            if gt.kind == TokenKind.DATE:
+                assert gt.kind == bt.kind
+            else:
+                assert gt == bt

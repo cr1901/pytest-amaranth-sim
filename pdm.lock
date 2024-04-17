@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:1b91d4f97868e487912175db88b2aa201b60dca2e7ea1a35c6a3be79eacf11bd"
+content_hash = "sha256:ef0f190554acb076efb1ab4bc164b614fa5c16242024d1ba5c8123df758eb37a"
 
 [[package]]
 name = "amaranth"
@@ -191,7 +191,7 @@ name = "pyvcd"
 version = "0.4.0"
 requires_python = ">=3.7"
 summary = "Python VCD file support"
-groups = ["default"]
+groups = ["default", "dev"]
 files = [
     {file = "pyvcd-0.4.0-py2.py3-none-any.whl", hash = "sha256:a21b10e5018b7940c8f2c20ef83d97496e86f15e215afed134ee115166035e17"},
     {file = "pyvcd-0.4.0.tar.gz", hash = "sha256:31be3f501441a9b8c5dc72660ff7b9cfef9b43b2121a23d96f586d2863270290"},

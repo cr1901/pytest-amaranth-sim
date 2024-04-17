@@ -50,3 +50,8 @@ write_to = "pytest_amaranth_sim/version.txt"
 
 [tool.pdm.scripts]
 test = { cmd = "pytest", help="run tests" }
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "pyvcd>=0.4.0",
+]
