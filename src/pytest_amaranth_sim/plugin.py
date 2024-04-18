@@ -1,6 +1,7 @@
 """Main module for amaranth simulator pytest plugin."""
 
 import pytest
+import in_place
 from amaranth import Elaboratable
 from amaranth.sim import Simulator
 
@@ -17,6 +18,12 @@ def pytest_addoption(parser):
         type="bool",
         default=False,
         help="if set, vcd files get longer, but less ambiguous, filenames"
+    )
+    parser.addini(
+        "extend_vcd_time",
+        type="string",
+        default="0",
+        help="extend simulation time in failing vcds by the supplied number of femtoseconds"
     )
 
 
@@ -42,6 +49,8 @@ class SimulatorFixture:
         else:
             self.name = req.node.name
 
+        self.extend = int(cfg.getini("extend_vcd_time"))
+
         self.sim = Simulator(self.mod)
         self.vcds = cfg.getoption("vcds")
 
@@ -66,10 +75,24 @@ class SimulatorFixture:
             self.sim.add_process(p)
 
         if self.vcds:
-            with self.sim.write_vcd(self.name + ".vcd", self.name + ".gtkw"):
-                self.sim.run()
+            try:
+                with self.sim.write_vcd(self.name + ".vcd", self.name + ".gtkw"):
+                    self.sim.run()
+            except AssertionError as e:
+                self._patch_vcds()
+                raise
         else:
             self.sim.run()
+
+    def _patch_vcds(self):
+        with in_place.InPlace(self.name + ".vcd") as fp:
+            ts = 0
+            for line in fp:
+                if line[0] in "#":
+                    ts = int(line[1:-1])
+                fp.write(line)
+            else:
+                fp.write(f"#{ts + self.extend}\n")
 
 
 @pytest.fixture

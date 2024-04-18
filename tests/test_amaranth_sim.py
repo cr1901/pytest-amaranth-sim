@@ -235,6 +235,10 @@ def test_user_forgot_override_mod(pytester, file_exists):
 
 def test_vcd_not_truncated(pytester, file_exists, monkeypatch):
     """Test that VCD files are not truncated on assertion failure."""
+    pytester.makeini("""
+        [pytest]
+        extend_vcd_time = 1000
+    """)
     pytester.makepyfile(
         """
         # amaranth: UnusedElaboratable=no
@@ -267,7 +271,7 @@ def test_vcd_not_truncated(pytester, file_exists, monkeypatch):
     """
     )
 
-    result = pytester.runpytest("-v", "--vcds")
+    result = pytester.runpytest("-v", "--vcds", "-s")
 
     assert result.ret == 1
 
@@ -281,10 +285,25 @@ def test_vcd_not_truncated(pytester, file_exists, monkeypatch):
         good_tokens = tokenize(gfp)
         bad_tokens = tokenize(bfp)
 
+        must_be_last = False
+        last_bt_ts = 0
         for gt, bt in zip_longest(good_tokens, bad_tokens):
+            assert not must_be_last
+
             # Doubt the VCDs will be generated at the exact same time down
             # to the microsecond...
             if gt.kind == TokenKind.DATE:
                 assert gt.kind == bt.kind
-            else:
-                assert gt == bt
+                continue
+
+            # Otherwise, VCDs must match exactly until the last entry.
+            if gt != bt:
+                must_be_last = True
+                continue
+
+            if bt.kind == TokenKind.CHANGE_TIME:
+                last_bt_ts = bt.time_change
+
+        assert gt.kind == bt.kind
+        assert bt.kind == TokenKind.CHANGE_TIME
+        assert bt.time_change == last_bt_ts + 1000

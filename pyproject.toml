@@ -32,6 +32,7 @@ classifiers = [
 dependencies = [
     "pytest>=6.2.0",
     "amaranth @ git+https://github.com/amaranth-lang/amaranth",
+    "in-place>=1.0.0",
 ]
 dynamic = ["version"]
 
