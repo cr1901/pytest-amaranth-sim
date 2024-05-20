@@ -307,3 +307,41 @@ def test_vcd_not_truncated(pytester, file_exists, monkeypatch):
         assert gt.kind == bt.kind
         assert bt.kind == TokenKind.CHANGE_TIME
         assert bt.time_change == last_bt_ts + 1000
+
+
+def test_async_yield_mix(pytester, file_exists, monkeypatch):
+    """Test custom TypeError async generator function hint."""
+    pytester.makepyfile(
+        """
+        # amaranth: UnusedElaboratable=no
+        import pytest
+        from amaranth import Module, Signal
+        from amaranth.sim import Tick
+
+        m = Module()
+        a = Signal(4)
+        b = Signal()
+
+        m.d.comb += b.eq(a == 15)
+        m.d.sync += a.eq(a + 1)
+
+        @pytest.fixture
+        def my_tb(request):
+            async def testbench(sim):
+                for _ in range(16):
+                    yield Tick()
+
+            return testbench
+
+        @pytest.mark.parametrize("mod,clks", [pytest.param(m, 1.0 / 12e6, id="sync")])
+        def test_async_gen_fail(sim, my_tb):
+            sim.run(testbenches=[my_tb])
+    """
+    )
+
+    result = pytester.runpytest("-v", "-k", "mix")
+
+    assert result.ret == 1
+    result.stdout.fnmatch_lines([
+        '*did you mix*',
+    ])

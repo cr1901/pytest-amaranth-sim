@@ -74,15 +74,18 @@ class SimulatorFixture:
         for p in processes:
             self.sim.add_process(p)
 
-        if self.vcds:
-            try:
-                with self.sim.write_vcd(self.name + ".vcd", self.name + ".gtkw"):
-                    self.sim.run()
-            except AssertionError as e:
-                self._patch_vcds()
-                raise
-        else:
-            self.sim.run()
+        try:
+            if self.vcds:
+                try:
+                    with self.sim.write_vcd(self.name + ".vcd", self.name + ".gtkw"):
+                        self.sim.run()
+                except AssertionError as e:
+                    self._patch_vcds()
+                    raise
+            else:
+                self.sim.run()
+        except TypeError as e:
+            raise TypeError("simulation returned TypeError; did you mix async-await with yield in your testbenches?") from e
 
     def _patch_vcds(self):
         with in_place.InPlace(self.name + ".vcd") as fp:

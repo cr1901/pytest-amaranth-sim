@@ -2,7 +2,6 @@
 """Basic test of amaranth sim pytest plugin using a dummy multiplier."""
 
 import pytest
-from amaranth.sim import Tick, Delay
 from amaranth import Elaboratable, Signal, Module
 from dataclasses import dataclass
 from contextlib import nullcontext as does_not_raise
@@ -58,23 +57,24 @@ def case_ids(args):
 @pytest.fixture(params=[pytest.param(MulTbArgs())], ids=mul_tb_id)
 def mul_tb(mod, request):
     """The multiplier testbench proper. Receives arguments via request."""
-    def testbench():
+    async def testbench(sim):
+        s = sim
         m = mod
 
         if m.registered:
-            yield Tick()
+            await s.tick()
         else:
-            yield Delay(0.1)
+            await s.delay(0.1)
 
-        yield m.a.eq(request.param.a_in)
-        yield m.b.eq(request.param.b_in)
+        s.set(m.a, request.param.a_in)
+        s.set(m.b, request.param.b_in)
 
         if m.registered:
-            yield Tick()
+            await s.tick()
         else:
-            yield Delay(0.1)
+            await s.delay(0.1)
 
-        assert (yield m.o) == request.param.o_out
+        assert s.get(m.o) == request.param.o_out
 
     return testbench
 
