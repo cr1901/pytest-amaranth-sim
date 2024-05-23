@@ -42,8 +42,11 @@ Repository = "https://github.com/cr1901/pytest-amaranth-sim"
 amaranth-sim = "pytest_amaranth_sim.plugin"
 
 [tool.pytest.ini_options]
-addopts="--ignore=examples"
+addopts="--doctest-glob=\"*.md\" --doctest-modules --ignore=examples"
 pytester_example_dir = "examples"
+pythonpath = [
+  "src/",
+]
 
 [tool.ruff]
 src = [ "src", "tests" ]  # https://docs.astral.sh/ruff/faq/#how-does-ruff-determine-which-of-my-imports-are-first-party-third-party-etc

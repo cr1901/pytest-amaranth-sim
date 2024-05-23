@@ -3,6 +3,31 @@
 from itertools import zip_longest
 from vcd.reader import tokenize, TokenKind
 
+
+def test_inject_sim_args(pytester, file_exists):
+    """Test various ways to inject a testbench with arguments."""
+    pytester.copy_example("test_inject.py")
+
+    # run pytest with the following cmd args
+    result = pytester.runpytest("-v")
+
+    # fnmatch_lines does an assertion internally
+    result.stdout.fnmatch_lines([
+        '*::test_inject_*[[]*[]] PASSED*',
+        '*::test_inject_*[[]*[]] PASSED*',
+        '*::test_inject_*[[]*[]] SKIPPED*',
+        '*::test_inject_*[[]*[]] PASSED*',
+        '*::test_inject_*[[]*[]] PASSED*',
+        '*::test_inject_*[[]*[]] PASSED*',
+    ])
+
+    # make sure that we get a '0' exit code for the testsuite
+    assert result.ret == 0
+
+    assert not file_exists("*.vcd")
+    assert not file_exists("*.gtkw")
+
+
 def test_sim_mod_fixture(pytester, file_exists):
     """Make sure that pytest accepts our fixture."""
     pytester.copy_example("test_mul.py")

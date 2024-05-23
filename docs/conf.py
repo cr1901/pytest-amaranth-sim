@@ -52,6 +52,7 @@ sys.path.append(os.path.abspath('../src'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "myst_parser",
     "sphinx.ext.ifconfig",
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
@@ -97,6 +98,10 @@ language = "en"
 # directories to ignore when looking for source files.
 exclude_patterns = ['_build']
 
+intersphinx_mapping = {'python': ('https://docs.python.org/3', None),
+                       'amaranth': (f"https://amaranth-lang.org/docs/amaranth/{am_ver}/", None),  # noqa: E501
+                       'pytest': ('https://docs.pytest.org/en/stable', None)}
+
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
 #default_role = None
@@ -122,7 +127,7 @@ pygments_style = 'sphinx'
 #keep_warnings = False
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = False
+todo_include_todos = True
 
 
 # -- Options for HTML output ----------------------------------------------

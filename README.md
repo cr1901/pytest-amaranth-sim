@@ -10,28 +10,87 @@ This [pytest] plugin was generated with [Cookiecutter] along with [@hackebrot]'s
 
 ## Features
 
-- TODO
+- Automatically set up an Amaranth [pysim](https://github.com/amaranth-lang/amaranth/blob/main/amaranth/sim/pysim.py)
+  simulator object fixture `sim`, ready to run testbenches, via `clks` and
+  `mod` fixtures.
+- Generate [VCDs](https://en.wikipedia.org/wiki/Value_change_dump) for simulations.
+  Includes optional workarounds for pytest/GTKWave behavior that I've found
+  useful.
 
 ## Requirements
 
-- TODO
+- At least Amaranth commit `89eae72` or more recent is required.
+- Pytest, of course, is also required, at least version 6.2.0.
 
 ## Installation
 
-You can install "pytest-amaranth-sim" via [pip] from [PyPI]:
+A [PyPI] version is pending the release of Amaranth 0.5. For now, use the
+[git repo](https://github.com/cr1901/pytest-amaranth-sim):
 
 ```
-$ pip install pytest-amaranth-sim
+$ pip install [-e] git+https://github.com/cr1901/pytest-amaranth-sim
 ```
 
 ## Usage
 
-- TODO
+```python
+import pytest
+from amaranth import Elaboratable, Signal, Module
+
+
+class Adder(Elaboratable):
+    def __init__(self, width=4):
+        self.width = width
+        self.a = Signal(width)
+        self.b = Signal(width)
+        self.o = Signal(width + 1)
+
+    def elaborate(self, plat):  # noqa: D102
+        m = Module()
+
+        m.d.sync += self.o.eq(self.a + self.b)
+
+        return m
+
+
+@pytest.fixture
+def testbench(mod, a, b, o):
+    if (a,b,o,mod.width) == (127, 127, 254, 4):
+        return pytest.skip(reason="inputs too wide")
+
+    async def testbench(sim):
+        await sim.tick()
+
+        sim.set(mod.a, a)
+        await sim.tick()
+        assert sim.get(mod.o) == a
+        sim.set(mod.b, b)
+        await sim.tick()
+        assert sim.get(mod.o) == o
+
+    return testbench
+
+
+@pytest.mark.parametrize("a,b,o", [(0, 0, 0), (1, 1, 2), (127, 127, 254)])
+@pytest.mark.parametrize("mod", [Adder(4), Adder(8)])
+@pytest.mark.parametrize("clks", [1.0 / 12e6])
+def test_inject_direct(sim, testbench):
+    sim.run(testbenches=[testbench], processes=[])
+```
+
+Save inside your test directory to a file that matches the glob `test_*.py`
+(see [pytest docs](https://docs.pytest.org/en/stable/explanation/goodpractices.html#conventions-for-python-test-discovery)
+for more info). Run with:
+
+```sh
+pytest [--vcds]
+```
 
 ## Contributing
 
-Contributions are very welcome. Tests can be run with [tox], please ensure
-the coverage at least stays the same before you submit a pull request.
+Contributions are very welcome. Tests can be run with [pytest] (`pdm test`),
+please ensure the coverage at least stays the same before you submit a pull
+request.
 
 ## License
 
