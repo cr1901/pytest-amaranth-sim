@@ -5,14 +5,12 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:b72b87a795a6473691d7d74ada0198dcef218898400fe206ea50faef69addafc"
+content_hash = "sha256:898f8d422c8845eb1fc03763bca36544ed1467b62afbd2c7a46854b31a5185c1"
 
 [[package]]
 name = "amaranth"
-version = "0.5.0.dev304"
+version = "0.5.0"
 requires_python = "~=3.8"
-git = "https://github.com/amaranth-lang/amaranth"
-revision = "d3c312cf96814a0f789aecd694666c841a798070"
 summary = "Amaranth hardware definition language"
 groups = ["default"]
 dependencies = [
@@ -20,6 +18,10 @@ dependencies = [
     "importlib-resources; python_version < \"3.9\"",
     "jschon~=0.11.1",
     "pyvcd<0.5,>=0.2.2",
+]
+files = [
+    {file = "amaranth-0.5.0-py3-none-any.whl", hash = "sha256:3d05d38864d6e88e40db93ed29ac0bee7f2a351d12810d4414f5b65a7cb0e23f"},
+    {file = "amaranth-0.5.0.tar.gz", hash = "sha256:9d2a1893d6ac938e0ff3983892eff5b56033e06691cc89674eb8d500dc46cdf6"},
 ]
 
 [[package]]
