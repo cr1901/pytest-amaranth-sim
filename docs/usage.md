@@ -22,32 +22,71 @@ for controlling Amaranth simulations:
 (how_to_use_fixtures)=
 ### How To Use These Fixtures
 
-```{todo} To be written. General outline:
+A basic test using this plugin looks something like this:
 
-* Pytests tests are expected to end with a `sim.run(testbenches=[], processes=[])` line.
+```
+class MyMod(Elaboratable):
+    def __init__(self, width=4, registered=True):
+        ...
 
+    def elaborate(self, plat):
+        m = Module()
+
+        ...
+
+        return m
+
+@pytest.fixture
+def tb(mod, request):
+    async def inner(sim):
+        s = sim
+        m = mod
+
+        ...
+
+        # Use s object to drive simulation forward.
+        await s.tick()
+
+        # Assert statements to test m.
+        assert ...
+
+    return inner
+
+@pytest.mark.parametrize("mod,clks", [(MyMod(), 1.0 / 12e6)])
+def test_tb(sim, tb):
+    sim.run(testbenches=[tb])
+```
+
+```{todo} Work on the prose of this section. Bullet points are a shortcut.
+```
+
+Of note: 
+
+* Tests are expected to end with `sim.run()`, where most of the actual test
+  is executed.
+* Tests must be parameterized _at least_ in terms of `mod`, and probably `clks`
+  as well (unless testing combinational code).
 * From the simulator's POV, testbenches and processes are expected to be a
   function of a single argument (async) or no argument (generator).
 
-* To create a testbench that takes parameters, you will generally wrap the
-  testbench function `tb` inside another function `outer` which takes arguments,
-  and then returns `tb`. While `tb` takes a single argument (async) or no argument
-  (generator), it can access the parameters/local variables of `outer` after
-  `outer` returns.
+Due to the simulator expecting functions of a single or no argument,
+testbenches and processes generally are defined as [inner functions](https://docs.python.org/3.9/reference/compound_stmts.html#function-definitions), returned from an outer function (or passed
+directly to `sim.run()`). In the above snippet, the inner function is `inner`
+and the outer function is `tb`.
 
-  See: Programmer's note under https://docs.python.org/3.9/reference/compound_stmts.html#function-definitions
+By using inner functions, testbenches and processes can be customized from
+multiple sources:
 
-* There are at least four ways to inject an inner function `tb` with variables:
-  * Create `outer` as a fixture that expects its arguments via request fixture,
-    and pass arguments to fixture via pytest.mark.parameterize. If you return
-    the inner testbench `tb`, the `outer` fixture will return a testbench
-    immediately ready to be passed to `sim.run`.
-  * Like above, but create `outer` as a fixture that expects its arguments via
-    other fixtures (either direct, or otherwise).
-  * Create fixtures that supply arguments to a `make_testbench(args)` function,
-    where `make_testbench()` is invoked in the `test_*` function body.
-  * Create the `tb` functions in-line in the `test_*` functions.
-```
+* The [`request` fixture](https://docs.pytest.org/en/stable/reference/reference.html#std-fixture-request).
+  This is useful when paired with [`pytest.mark.parametrize`](https://docs.pytest.org/en/stable/how-to/parametrize.html#pytest-mark-parametrize-parametrizing-test-functions) or [indirect parameterization](https://docs.pytest.org/en/stable/example/parametrize.html#indirect-parametrization).
+* From other fixtures when parameterizing tests [directly](https://docs.pytest.org/en/stable/how-to/fixtures.html#override-a-fixture-with-direct-test-parametrization).
+* Direct input arguments to the outer function. This is useful when outer
+  isn't a fixture. The outer function would be invoked inside a test body
+  (`test_tb` in the above snippet) and return your testbenches and processes
+  to be passed to `sim.run()`.
+* If your given test body has enough fixtures and parameterization, the test
+  itself can be the outer function, and testbenches and processes can be
+  defined in-line in the test body!
 
 ## Command Line Options
 
