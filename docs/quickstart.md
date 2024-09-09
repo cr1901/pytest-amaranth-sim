@@ -13,12 +13,11 @@
   - When a testbench fails, optionally extend the output VCD trace so that the
     failing state is more visible at lower zooms (`extend_vcd_time`). See
     [this issue](https://github.com/gtkwave/gtkwave/issues/230#issuecomment-2065663811)
-    for an example of why this workaround exists).
+    for an example of why this workaround exists.
 
 ## Requirements
 
-- At least Amaranth commit `89eae72` or more recent is required.
-  - The first release version that will be supported is 0.5.
+- At least Amaranth `v0.5.0` or more recent is required.
 - Pytest, of course, is also required, at least version 6.2.0.
   - Development tracks whatever version of `pytest` is in the PDM
     [lock file](https://pdm-project.org/latest/usage/lockfile/). This is not
