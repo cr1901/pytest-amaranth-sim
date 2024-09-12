@@ -36,23 +36,55 @@ dependencies = [
 ]
 dynamic = ["version"]
 
-[tool.pytest.ini_options]
-addopts="--ignore=examples"
-pytester_example_dir = "examples"
-
 [project.urls]
 Repository = "https://github.com/cr1901/pytest-amaranth-sim"
 [project.entry-points.pytest11]
 amaranth-sim = "pytest_amaranth_sim.plugin"
 
+[tool.pytest.ini_options]
+addopts="--ignore=examples"
+pytester_example_dir = "examples"
+
+[tool.ruff]
+src = [ "src", "tests" ]  # https://docs.astral.sh/ruff/faq/#how-does-ruff-determine-which-of-my-imports-are-first-party-third-party-etc
+line-length = 79  # flake8 compat
+# These will catch missing docstrings and other nits, which pydoclint doesn't.
+# Also, add stable-but-disabled checks
+lint.extend-select = ["E501", "D"]
+lint.pydocstyle.convention = "numpy"
+lint.pycodestyle.max-line-length = 79  # flake8 compat
+# I don't see the need to document tests like they're a public API.
+lint.per-file-ignores = { "tests/**/*.py" = ["D10"] }
+
 [tool.pdm.version]
 source = "scm"
 write_to = "pytest_amaranth_sim/version.txt"
 
-[tool.pdm.scripts]
-test = { cmd = "pytest", help="run tests" }
-
 [tool.pdm.dev-dependencies]
 dev = [
     "pyvcd>=0.4.0",
+    "pytest-sphinx>=0.6.3",
 ]
+lint = [
+    "ruff>=0.4.4",
+    "pydoclint[flake8]>=0.4.1",
+]
+doc = [
+    "sphinx>=7.1.2",
+    "sphinx-rtd-theme>=2.0.0",
+    "myst-parser>=3.0.1",
+    "sphinx-autobuild>=2021.3.14",
+]
+
+[tool.pdm.scripts]
+test = { cmd = "pytest", help="run tests" }
+doc = "sphinx-build docs/ docs/_build/"
+# FIXME: pytest-sphinx doesn't catch all of these. Remove when it does.
+doc-test = "sphinx-build -b doctest docs/ docs/_build"
+doc-linkck = "sphinx-build docs/ docs/_linkcheck/ -b linkcheck"
+doc-auto = "sphinx-autobuild docs/ docs/_build/ --watch src/pytest_amaranth_sim"
+
+[tool.pdm.scripts._update-ruff]
+cmd = "pdm update --dev -G lint ruff"
+env = { CARGO_PROFILE_RELEASE_LTO="false" }
+help = "update Ruff linter on MSYS2- work around Rust issue #109797"
