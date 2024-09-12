@@ -97,11 +97,13 @@ class SimulatorFixture:
 
 @pytest.fixture
 def mod():
+    """Fixture representing an Amaranth Module."""
     raise pytest.UsageError("User must override `mod` fixture in test- see: https://docs.pytest.org/en/stable/how-to/fixtures.html#override-a-fixture-with-direct-test-parametrization")
 
 
 @pytest.fixture
 def sim(mod, clks, request, pytestconfig):
+    """Fixture representing an Amaranth `pysim` context."""
     simfix = SimulatorFixture(mod, clks, request, pytestconfig)
     return simfix
 
