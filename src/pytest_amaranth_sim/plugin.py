@@ -26,7 +26,8 @@ def pytest_addoption(parser):  # noqa: D103
         "extend_vcd_time",
         type="string",
         default="0",
-        help="extend simulation time in failing vcds by the supplied number of femtoseconds"
+        help="extend simulation time in failing vcds by the supplied number "
+             "of femtoseconds"
     )
 
 
@@ -54,9 +55,9 @@ class SimulatorFixture:
         The :func:`module <mod>` fixture.
     clks: None or float or dict of str: float
         The :func:`clock periods <clks>` fixture.
-    req:
-        The :mod:`pytest` :func:`~_pytest.fixtures.request` fixture.
-    cfg:
+    req: ~_pytest.fixtures.FixtureRequest
+        The :mod:`pytest` ``request`` fixture.
+    cfg: ~_pytest.config.Config
         The :mod:`pytest` :func:`~_pytest.fixtures.pytestconfig` fixture.
 
     Raises
@@ -89,13 +90,15 @@ class SimulatorFixture:
             if isinstance(self.clks, float):
                 self.sim.add_clock(self.clks)
             elif isinstance(self.clks, dict):
-                raise NotImplementedError("simulation for domains besides sync is not yet supported")
+                raise NotImplementedError("simulation for domains besides "
+                                          "sync is not yet supported")
                 # for domain, clk in clks.iter():
                 #     pass
             else:
-                raise ValueError(f"clks should be a float or dict of floats, not {type(self.clks)}")
+                raise ValueError("clks should be a float or dict of floats, "
+                                 f"not {type(self.clks)}")
 
-    def run(self, testbenches=[], processes=[]):
+    def run(self, testbenches=[], processes=[]):  # noqa: DOC501
         """Run a simulation using Amaranth's :class:`amaranth.sim.Simulator`.
 
         :meth:`run` is expected to be called as the last statement in a test.
@@ -130,9 +133,10 @@ class SimulatorFixture:
 
         if self.vcds:
             try:
-                with self.sim.write_vcd(self.name + ".vcd", self.name + ".gtkw"):
+                with self.sim.write_vcd(self.name + ".vcd",
+                                        self.name + ".gtkw"):
                     self.sim.run()
-            except AssertionError as e:
+            except:
                 self._patch_vcds()
                 raise
         else:
@@ -176,9 +180,9 @@ def sim(mod, clks, request, pytestconfig):
         The :func:`module <mod>` fixture.
     clks: float or dict of str: float
         The :func:`clock periods <clks>` fixture.
-    request:
-        The :mod:`pytest` :func:`~_pytest.fixtures.request` fixture.
-    pytestconfig:
+    request: ~_pytest.fixtures.FixtureRequest
+        The :mod:`pytest` ``request`` fixture.
+    pytestconfig: ~_pytest.config.Config
         The :mod:`pytest` :func:`~_pytest.fixtures.pytestconfig` fixture.
 
     Returns

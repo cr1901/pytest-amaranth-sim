@@ -164,7 +164,7 @@ def test_parameterized_testbench_and_module(pytester, file_exists):
 
 
 def test_collect(pytester, file_exists):
-    """Test how pytest names tests with our hook and id functions"""
+    """Test how pytest names tests with our hook and id functions."""
     pytester.copy_example("test_mul.py")
 
     pytester.makepyfile(
@@ -187,7 +187,7 @@ def test_collect(pytester, file_exists):
         @pytest.mark.parametrize("mod,clks,my_mul_tb", [pytest.param(MyMul(), 1.0 / 13.33e6, 3)])
         def test_naming_extra(sim, my_mul_tb):
             sim.run(testbenches=[my_mul_tb])
-    """
+    """  # noqa: E501
     )
 
     result = pytester.runpytest("-v", "--co")
@@ -210,6 +210,7 @@ def test_collect(pytester, file_exists):
 
     assert not file_exists("*.vcd")
     assert not file_exists("*.gtkw")
+
 
 # Below this line, we _want_ these tests to fail!
 def test_comb_testbench_fail(pytester, file_exists):
@@ -293,7 +294,7 @@ def test_vcd_not_truncated(pytester, file_exists, monkeypatch):
         @pytest.mark.parametrize("mod,clks", [pytest.param(m, 1.0 / 12e6, id="sync")])
         def test_vcd_truncation(sim, my_tb):
             sim.run(testbenches=[my_tb])
-    """
+    """  # noqa: E501
     )
 
     result = pytester.runpytest("-v", "--vcds", "-s")

@@ -1,0 +1,1 @@
+"""Amaranth simulator pytest plugin."""

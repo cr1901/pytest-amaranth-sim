@@ -27,6 +27,7 @@ class Mul(Elaboratable):
 
         return m
 
+
 @dataclass
 class MulTbArgs:
     """Dataclass to collect arguments to the multipler testbench."""
@@ -56,7 +57,7 @@ def case_ids(args):
 
 @pytest.fixture(params=[pytest.param(MulTbArgs())], ids=mul_tb_id)
 def mul_tb(mod, request):
-    """The multiplier testbench proper. Receives arguments via request."""
+    """The multiplier testbench proper. Receives arguments via request."""  # noqa: D401, E501
     async def testbench(sim):
         s = sim
         m = mod

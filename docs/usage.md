@@ -102,6 +102,6 @@ are available:
 
 * `long_vcd_filenames`: VCD and GTKW files generated have longer, but less
   ambiguous filenames (`bool`).
-* `extend_vcd_time`: Work around [GTKWave behavior](https://github.com/gtkwave/gtkwave/issues/230#issuecomment-2065663811)
+* `extend_vcd_time`: Work around [GTKWave behavior](https://github.com/gtkwave/gtkwave/issues/230)
   to truncate VCD traces that end on a transition (`string`, femtoseconds to
   extend trace).

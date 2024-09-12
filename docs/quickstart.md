@@ -12,8 +12,8 @@
   - VCDs filename verbosity is configurable (`long_vcd_filenames`).
   - When a testbench fails, optionally extend the output VCD trace so that the
     failing state is more visible at lower zooms (`extend_vcd_time`). See
-    [this issue](https://github.com/gtkwave/gtkwave/issues/230#issuecomment-2065663811)
-    for an example of why this workaround exists.
+    [this issue](https://github.com/gtkwave/gtkwave/issues/230) for an example
+    of why this workaround exists.
 
 ## Requirements
 
@@ -93,4 +93,4 @@ The {doc}`Usage <usage>` section elaborates on how to effectively set up
 testbenches and VCD waveforms using this plugin.
 
 [pip]: https://pypi.org/project/pip/
-[pypi]: https://pypi.org/project
+[pypi]: https://pypi.org/
