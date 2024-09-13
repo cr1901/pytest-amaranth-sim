@@ -69,7 +69,7 @@ class SimulatorFixture:
         :class:`str`: :class:`float`.
     """  #  noqa: E501
 
-    def __init__(self, mod, clks, req, cfg):
+    def __init__(self, mod, clks, req, cfg):  # noqa: DOC503 # https://github.com/jsh9/pydoclint/issues/165
         self.mod = mod
         self.clks = clks
 
@@ -154,7 +154,7 @@ class SimulatorFixture:
 
 
 @pytest.fixture
-def mod():
+def mod():  # noqa: DOC503  # https://github.com/jsh9/pydoclint/issues/165
     """Fixture representing an Amaranth :ref:`Module <amaranth:lang-modules>`.
     
     If the :func:`sim` fixture is used in a test, either directly or
