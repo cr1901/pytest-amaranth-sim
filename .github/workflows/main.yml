@@ -16,17 +16,24 @@ jobs:
         python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
-
       - uses: pdm-project/setup-pdm@v4
         with:
           python-version: ${{ matrix.python-version }}
           cache: true
-
       - name: Install PDM dependencies
         run: pdm install --dev
-
+      - name: Lint
+        if: ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags/') }}
+        run: |
+          pdm run lint
       - name: Run tests
-        run: pdm run test --exitfirst
+        run: |
+          pdm run test --exitfirst
+          pdm run doc-test
+      - name: Check links
+        continue-on-error: true
+        run: |
+          pdm run doc-linkck
 
       # If we publish under pytest-dev (unlikely), tox will be required.
       # - name: Install tox
@@ -34,3 +41,28 @@ jobs:
 
       # - name: Test
       #   run: tox -e py
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    environment:
+      name: publish
+      url: https://pypi.org/p/pytest-amaranth-sim
+    permissions:
+      id-token: write
+    steps:
+    - name: Check out source code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Build package
+      run: |
+        pip install build
+        python -m build
+    - name: Verify package metadata
+      run: |
+        pip install twine
+        twine check dist/*
+    - name: Publish package to PyPI
+      if: ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags/') }}
+      uses: pypa/gh-action-pypi-publish@release/v1
