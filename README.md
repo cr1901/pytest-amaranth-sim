@@ -1,6 +1,7 @@
 # pytest-amaranth-sim
 
-[![PyPI version](https://img.shields.io/pypi/pyversions/pytest-amaranth-sim.svg)](https://pypi.org/project/pytest-amaranth-sim)
+[![Documentation Status](https://readthedocs.org/projects/pytest-amaranth-sim/badge/?version=latest)](https://pytest-amaranth-sim.readthedocs.io/en/latest/?badge=latest)
+[![PyPI version](https://img.shields.io/pypi/v/pytest-amaranth-sim.svg)](https://pypi.org/project/pytest-amaranth-sim)
 [![Python versions](https://img.shields.io/pypi/pyversions/pytest-amaranth-sim.svg)](https://pypi.org/project/pytest-amaranth-sim)
 [![See Build Status on GitHub Actions](https://github.com/cr1901/pytest-amaranth-sim/actions/workflows/main.yml/badge.svg)](https://github.com/cr1901/pytest-amaranth-sim/actions/workflows/main.yml)
 
@@ -19,16 +20,31 @@ This [pytest] plugin was generated with [Cookiecutter] along with [@hackebrot]'s
 
 ## Requirements
 
-- At least Amaranth commit `89eae72` or more recent is required.
-- Pytest, of course, is also required, at least version 6.2.0.
+- At least Amaranth version `0.5.0` or more recent is required.
+- Pytest, of course, is also required, at least version `6.2.0`.
 
 ## Installation
 
-A [PyPI] version is pending the release of Amaranth 0.5. For now, use the
-[git repo](https://github.com/cr1901/pytest-amaranth-sim):
+`pytest-amaranth-sim` is available on [PyPI]:
+
+```
+$ pip install pytest-amaranth-sim
+```
+
+If using this plugin as part [PDM], you can install using `pdm add`:
+
+```
+$ pdm add -G dev pytest-amaranth-sim
+```
+
+To follow development, use the [git repo](https://github.com/cr1901/pytest-amaranth-sim):
 
 ```
 $ pip install [-e] git+https://github.com/cr1901/pytest-amaranth-sim
+```
+
+```
+$ pdm add -G dev git+https://github.com/cr1901/pytest-amaranth-sim
 ```
 
 ## Usage
@@ -112,3 +128,4 @@ If you encounter any problems, please [file an issue] along with a detailed desc
 [pypi]: https://pypi.org/project
 [pytest]: https://github.com/pytest-dev/pytest
 [tox]: https://tox.readthedocs.io/en/latest/
+[pdm]: https://pdm-project.org/en/latest/

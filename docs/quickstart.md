@@ -26,13 +26,34 @@
 
 ## Installation
 
-You can install "pytest-amaranth-sim" via [pip] from the [git repo](https://github.com/cr1901/pytest-amaranth-sim):
+You can install "pytest-amaranth-sim" in the following ways:
 
-```
-$ pip install [-e] git+https://github.com/cr1901/pytest-amaranth-sim
-```
+* From [PyPI]:
 
-A [PyPI] release is pending the release of Amaranth 0.5.
+  ```
+  $ pip install pytest-amaranth-sim
+  ```
+
+* Managed by [PDM]:
+
+  ```
+  $ pdm add -G dev pytest-amaranth-sim
+  ```
+
+* Via [pip] from the [git repo](https://github.com/cr1901/pytest-amaranth-sim):
+
+  ```
+  $ pip install [-e] git+https://github.com/cr1901/pytest-amaranth-sim
+  ```
+
+* Via PDM from the git repo:
+
+  ```
+  $ pdm add -G dev git+https://github.com/cr1901/pytest-amaranth-sim
+  ```
+
+`pytest` should automatically be installed if not already done so. It should
+[automatically detect](https://pluggy.readthedocs.io/en/latest/) the plugin.
 
 ## Basic Example
 
@@ -94,3 +115,4 @@ testbenches and VCD waveforms using this plugin.
 
 [pip]: https://pypi.org/project/pip/
 [pypi]: https://pypi.org/
+[pdm]: https://pdm-project.org/en/latest/
