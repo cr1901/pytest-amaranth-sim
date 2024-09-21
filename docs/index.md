@@ -16,6 +16,8 @@ written to encapsulate common behavior when writing tests for
 Quick Start <quickstart>
 Usage <usage>
 Development <dev>
+
+CHANGELOG <changes>
 TODO List <todo>
 ```
 
