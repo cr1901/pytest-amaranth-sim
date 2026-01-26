@@ -217,16 +217,42 @@ def test_comb_testbench_fail(pytester, file_exists):
     """Test combinational and sync testbenches without clks decorator."""
     pytester.copy_example("test_mul.py")
 
+    # Trying to add a clock via parameterization to a comb-only module, will
+    # trigger an Amaranth error at pytest setup time; test_mul.py by itself
+    # cannot catch this. Since test_mul is meant to be an example, create a
+    # new file to test this case.
+    #
+    # TODO: when https://github.com/amaranth-lang/amaranth/issues/442 is
+    # solved, we can move test_comb_tb[*reg-mul*] to this file too.
+    pytester.makepyfile(
+        """
+        # amaranth: UnusedElaboratable=no
+        import pytest
+        from contextlib import nullcontext as does_not_raise
+        from test_mul import Mul, mul_tb
+
+        @pytest.mark.parametrize(
+        "mod,clks,expectation", [
+            (Mul(registered=False), 1.0 / 12.0e6, does_not_raise())
+        ], ids=["comb-mul-with-clock-setup-error"])
+        def test_comb_tb(sim, mul_tb, expectation):
+            with expectation:
+                sim.run(testbenches=[mul_tb])
+        """
+    )
+
     # run pytest with the following cmd args
     result = pytester.runpytest("-v", "-k", "comb", "--vcds")
 
     # fnmatch_lines does an assertion internally
     result.stdout.fnmatch_lines([
-        '*::test_comb_tb[[]*[]] PASSED*',
+        "*::test_comb_tb[[]*clock-setup-error[]] ERROR*",
+        "*::test_comb_tb[[]*reg-mul[]] SKIPPED*",
+        "*::test_comb_tb[[]*mul-pass[]] PASSED*",
     ])
 
-    # make sure that we get a '0' exit code for the testsuite
-    assert result.ret == 0
+    # make sure that we get a '1' exit code for the testsuite
+    assert result.ret == 1
 
     assert file_exists("test_comb_tb[[]*[]].vcd")
     assert file_exists("test_comb_tb[[]*[]].gtkw")
