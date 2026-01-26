@@ -49,11 +49,11 @@ pythonpath = [
 ]
 
 [tool.ruff]
+# Accept the risks of preview mode to try the unstable E checks and pydoclint support.
+preview = true
 src = [ "src", "tests" ]  # https://docs.astral.sh/ruff/faq/#how-does-ruff-determine-which-of-my-imports-are-first-party-third-party-etc
 line-length = 79  # flake8 compat
-# These will catch missing docstrings and other nits, which pydoclint doesn't.
-# Also, add stable-but-disabled checks
-lint.extend-select = ["E501", "D"]
+lint.extend-select = ["E1", "E2", "E3", "RUF100", "E5", "W", "D", "DOC"]
 lint.pydocstyle.convention = "numpy"
 lint.pycodestyle.max-line-length = 79  # flake8 compat
 # I don't see the need to document tests like they're a public API.
@@ -67,10 +67,6 @@ write_to = "pytest_amaranth_sim/version.txt"
 dev = [
     "pyvcd>=0.4.0",
     "pytest-sphinx>=0.6.3",
-]
-lint = [
-    "ruff>=0.4.4",
-    "pydoclint[flake8]>=0.4.1",
 ]
 doc = [
     "sphinx>=7.1.2",
@@ -93,3 +89,8 @@ doc-auto = "sphinx-autobuild docs/ docs/_build/ --watch src/pytest_amaranth_sim"
 cmd = "pdm update --dev -G lint ruff"
 env = { CARGO_PROFILE_RELEASE_LTO="false" }
 help = "update Ruff linter on MSYS2- work around Rust issue #109797"
+
+[dependency-groups]
+lint = [
+    "ruff>=0.14.1",
+]

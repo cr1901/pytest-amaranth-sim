@@ -5,7 +5,7 @@
 groups = ["default", "dev", "doc", "lint"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:2f7238f7be8eea7fa5ddfa6bc7da755f95dbe606d8ad075e8614f03d99a8bc88"
+content_hash = "sha256:a2f26cf1fa662a4abe0b1fd478377ed451d4b0585b4dd0be7af5154ad83a70da"
 
 [[metadata.targets]]
 requires_python = ">=3.8"
@@ -23,7 +23,7 @@ files = [
 
 [[package]]
 name = "amaranth"
-version = "0.5.2"
+version = "0.5.8"
 requires_python = "~=3.8"
 summary = "Amaranth hardware definition language"
 groups = ["default"]
@@ -34,8 +34,8 @@ dependencies = [
     "pyvcd<0.5,>=0.2.2",
 ]
 files = [
-    {file = "amaranth-0.5.2-py3-none-any.whl", hash = "sha256:552ac232a12093d5375e23276c070f21da74d07778bf75c456b8db781a4bc919"},
-    {file = "amaranth-0.5.2.tar.gz", hash = "sha256:af52811bca464233a3bbd72193ede584e75de592391cae92d1cbf24b98a3c954"},
+    {file = "amaranth-0.5.8-py3-none-any.whl", hash = "sha256:6c32bd3422c700d246904032c1252f0a84225d2bdf9e26de4bc7df2ec83a8b39"},
+    {file = "amaranth-0.5.8.tar.gz", hash = "sha256:a9d6221fdb002614e82ac3603d245827829f279e8eb5fc543c948ea3609328ea"},
 ]
 
 [[package]]
@@ -150,40 +150,14 @@ files = [
 ]
 
 [[package]]
-name = "click"
-version = "8.1.7"
-requires_python = ">=3.7"
-summary = "Composable command line interface toolkit"
-groups = ["lint"]
-dependencies = [
-    "colorama; platform_system == \"Windows\"",
-    "importlib-metadata; python_version < \"3.8\"",
-]
-files = [
-    {file = "click-8.1.7-py3-none-any.whl", hash = "sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28"},
-    {file = "click-8.1.7.tar.gz", hash = "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de"},
-]
-
-[[package]]
 name = "colorama"
 version = "0.4.6"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
 summary = "Cross-platform colored terminal text."
-groups = ["default", "dev", "doc", "lint"]
+groups = ["default", "dev", "doc"]
 files = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
     {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
-]
-
-[[package]]
-name = "docstring-parser-fork"
-version = "0.0.9"
-requires_python = "<4.0,>=3.7"
-summary = "Parse Python docstrings in reST, Google and Numpydoc format"
-groups = ["lint"]
-files = [
-    {file = "docstring_parser_fork-0.0.9-py3-none-any.whl", hash = "sha256:0be85ad00cb25bf5beeb673e46e777facf0f47552fa3a7570d120ef7e3374401"},
-    {file = "docstring_parser_fork-0.0.9.tar.gz", hash = "sha256:95b23cc5092af85080c716a6da68360f5ae4fcffa75f4a3aca5e539783cbcc3d"},
 ]
 
 [[package]]
@@ -207,23 +181,6 @@ marker = "python_version < \"3.11\""
 files = [
     {file = "exceptiongroup-1.2.2-py3-none-any.whl", hash = "sha256:3111b9d131c238bec2f8f516e123e14ba243563fb135d3fe885990585aa7795b"},
     {file = "exceptiongroup-1.2.2.tar.gz", hash = "sha256:47c2edf7c6738fafb49fd34290706d1a1a2f4d1c6df275526b62cbb4aa5393cc"},
-]
-
-[[package]]
-name = "flake8"
-version = "5.0.4"
-requires_python = ">=3.6.1"
-summary = "the modular source code checker: pep8 pyflakes and co"
-groups = ["lint"]
-dependencies = [
-    "importlib-metadata<4.3,>=1.1.0; python_version < \"3.8\"",
-    "mccabe<0.8.0,>=0.7.0",
-    "pycodestyle<2.10.0,>=2.9.0",
-    "pyflakes<2.6.0,>=2.5.0",
-]
-files = [
-    {file = "flake8-5.0.4-py2.py3-none-any.whl", hash = "sha256:7a1cf6b73744f5806ab95e526f6f0d8c01c66d7bbe349562d22dfca20610b248"},
-    {file = "flake8-5.0.4.tar.gz", hash = "sha256:6fbe320aad8d6b95cec8b8e47bc933004678dc63095be98528b7bdd2a9f510db"},
 ]
 
 [[package]]
@@ -281,13 +238,13 @@ files = [
 
 [[package]]
 name = "in-place"
-version = "1.0.0"
+version = "1.0.1"
 requires_python = ">=3.8"
 summary = "In-place file processing"
 groups = ["default"]
 files = [
-    {file = "in_place-1.0.0-py3-none-any.whl", hash = "sha256:df6781ae341cd57b0894a2e56dc6f7b1daad1235550313c004686dd19eba7fcd"},
-    {file = "in_place-1.0.0.tar.gz", hash = "sha256:503048e91e0736cb092787c8017dce1328a62421f8fb81c29d25854c355af5ac"},
+    {file = "in_place-1.0.1-py3-none-any.whl", hash = "sha256:a27e4cf48eca16a75abb50cce899129ef6a700a6dfc461623c8a7515a25916d8"},
+    {file = "in_place-1.0.1.tar.gz", hash = "sha256:4b0b2b9073c3e7a116f819f7f51711b56216b24b67be57cfcdfe717400bc8743"},
 ]
 
 [[package]]
@@ -418,17 +375,6 @@ files = [
 ]
 
 [[package]]
-name = "mccabe"
-version = "0.7.0"
-requires_python = ">=3.6"
-summary = "McCabe checker, plugin for flake8"
-groups = ["lint"]
-files = [
-    {file = "mccabe-0.7.0-py2.py3-none-any.whl", hash = "sha256:6c2d30ab6be0e4a46919781807b4f0d834ebdd6c6e3dca0bda5a15f863427b6e"},
-    {file = "mccabe-0.7.0.tar.gz", hash = "sha256:348e0240c33b60bbdf4e523192ef919f28cb2c3d7d5c7794f74009290f236325"},
-]
-
-[[package]]
 name = "mdit-py-plugins"
 version = "0.4.2"
 requires_python = ">=3.8"
@@ -474,13 +420,13 @@ files = [
 
 [[package]]
 name = "packaging"
-version = "24.1"
+version = "26.0"
 requires_python = ">=3.8"
 summary = "Core utilities for Python packages"
 groups = ["default", "dev", "doc"]
 files = [
-    {file = "packaging-24.1-py3-none-any.whl", hash = "sha256:5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124"},
-    {file = "packaging-24.1.tar.gz", hash = "sha256:026ed72c8ed3fcce5bf8950572258698927fd1dbda10a5e981cdf0ac37f4f002"},
+    {file = "packaging-26.0-py3-none-any.whl", hash = "sha256:b36f1fef9334a5588b4166f8bcd26a14e521f2b55e6b9de3aaa80d3ff7a37529"},
+    {file = "packaging-26.0.tar.gz", hash = "sha256:00243ae351a257117b6a241061796684b084ed1c516a08c48a3f7e147a9d80b4"},
 ]
 
 [[package]]
@@ -492,60 +438,6 @@ groups = ["default", "dev"]
 files = [
     {file = "pluggy-1.5.0-py3-none-any.whl", hash = "sha256:44e1ad92c8ca002de6377e165f3e0f1be63266ab4d554740532335b9d75ea669"},
     {file = "pluggy-1.5.0.tar.gz", hash = "sha256:2cffa88e94fdc978c4c574f15f9e59b7f4201d439195c3715ca9e2486f1d0cf1"},
-]
-
-[[package]]
-name = "pycodestyle"
-version = "2.9.1"
-requires_python = ">=3.6"
-summary = "Python style guide checker"
-groups = ["lint"]
-files = [
-    {file = "pycodestyle-2.9.1-py2.py3-none-any.whl", hash = "sha256:d1735fc58b418fd7c5f658d28d943854f8a849b01a5d0a1e6f3f3fdd0166804b"},
-    {file = "pycodestyle-2.9.1.tar.gz", hash = "sha256:2c9607871d58c76354b697b42f5d57e1ada7d261c261efac224b664affdc5785"},
-]
-
-[[package]]
-name = "pydoclint"
-version = "0.5.7"
-requires_python = ">=3.8"
-summary = "A Python docstring linter that checks arguments, returns, yields, and raises sections"
-groups = ["lint"]
-dependencies = [
-    "click>=8.1.0",
-    "docstring-parser-fork>=0.0.9",
-    "tomli>=2.0.1; python_version < \"3.11\"",
-]
-files = [
-    {file = "pydoclint-0.5.7-py2.py3-none-any.whl", hash = "sha256:22561b8f876b7bd3d4966a3b7fe27bfdbfa41fa50d0719f13b08844a39e2717c"},
-    {file = "pydoclint-0.5.7.tar.gz", hash = "sha256:d2938efc95233205822bebe5da5c8e1c4796da09988a2a73c2d6b63cef4577a6"},
-]
-
-[[package]]
-name = "pydoclint"
-version = "0.5.7"
-extras = ["flake8"]
-requires_python = ">=3.8"
-summary = "A Python docstring linter that checks arguments, returns, yields, and raises sections"
-groups = ["lint"]
-dependencies = [
-    "flake8>=4",
-    "pydoclint==0.5.7",
-]
-files = [
-    {file = "pydoclint-0.5.7-py2.py3-none-any.whl", hash = "sha256:22561b8f876b7bd3d4966a3b7fe27bfdbfa41fa50d0719f13b08844a39e2717c"},
-    {file = "pydoclint-0.5.7.tar.gz", hash = "sha256:d2938efc95233205822bebe5da5c8e1c4796da09988a2a73c2d6b63cef4577a6"},
-]
-
-[[package]]
-name = "pyflakes"
-version = "2.5.0"
-requires_python = ">=3.6"
-summary = "passive checker of Python programs"
-groups = ["lint"]
-files = [
-    {file = "pyflakes-2.5.0-py2.py3-none-any.whl", hash = "sha256:4579f67d887f804e67edb544428f264b7b24f435b263c4614f384135cea553d2"},
-    {file = "pyflakes-2.5.0.tar.gz", hash = "sha256:491feb020dca48ccc562a8c0cbe8df07ee13078df59813b83959cbdada312ea3"},
 ]
 
 [[package]]
@@ -561,7 +453,7 @@ files = [
 
 [[package]]
 name = "pytest"
-version = "8.3.3"
+version = "8.3.5"
 requires_python = ">=3.8"
 summary = "pytest: simple powerful testing with Python"
 groups = ["default", "dev"]
@@ -574,8 +466,8 @@ dependencies = [
     "tomli>=1; python_version < \"3.11\"",
 ]
 files = [
-    {file = "pytest-8.3.3-py3-none-any.whl", hash = "sha256:a6853c7375b2663155079443d2e45de913a911a11d669df02a50814944db57b2"},
-    {file = "pytest-8.3.3.tar.gz", hash = "sha256:70b98107bd648308a7952b06e6ca9a50bc660be218d53c257cc1fc94fda10181"},
+    {file = "pytest-8.3.5-py3-none-any.whl", hash = "sha256:c69214aa47deac29fad6c2a4f590b9c4a9fdb16a403176fe154b79c0b4d4d820"},
+    {file = "pytest-8.3.5.tar.gz", hash = "sha256:f4efe70cc14e511565ac476b57c279e12a855b11f48f212af1080ef2263d3845"},
 ]
 
 [[package]]
@@ -605,13 +497,13 @@ files = [
 
 [[package]]
 name = "pyvcd"
-version = "0.4.0"
+version = "0.4.1"
 requires_python = ">=3.7"
 summary = "Python VCD file support"
 groups = ["default", "dev"]
 files = [
-    {file = "pyvcd-0.4.0-py2.py3-none-any.whl", hash = "sha256:a21b10e5018b7940c8f2c20ef83d97496e86f15e215afed134ee115166035e17"},
-    {file = "pyvcd-0.4.0.tar.gz", hash = "sha256:31be3f501441a9b8c5dc72660ff7b9cfef9b43b2121a23d96f586d2863270290"},
+    {file = "pyvcd-0.4.1-py2.py3-none-any.whl", hash = "sha256:3a4c71d4dce741f1155a2ed11a6278390a0816293068f6162ad9658d20f75578"},
+    {file = "pyvcd-0.4.1.tar.gz", hash = "sha256:dc6275e95a7949b8236086ab2e6d03afede73441243ec5109c9ea89077f3d696"},
 ]
 
 [[package]]
@@ -706,29 +598,30 @@ files = [
 
 [[package]]
 name = "ruff"
-version = "0.6.4"
+version = "0.14.14"
 requires_python = ">=3.7"
 summary = "An extremely fast Python linter and code formatter, written in Rust."
 groups = ["lint"]
 files = [
-    {file = "ruff-0.6.4-py3-none-linux_armv6l.whl", hash = "sha256:c4b153fc152af51855458e79e835fb6b933032921756cec9af7d0ba2aa01a258"},
-    {file = "ruff-0.6.4-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:bedff9e4f004dad5f7f76a9d39c4ca98af526c9b1695068198b3bda8c085ef60"},
-    {file = "ruff-0.6.4-py3-none-macosx_11_0_arm64.whl", hash = "sha256:d02a4127a86de23002e694d7ff19f905c51e338c72d8e09b56bfb60e1681724f"},
-    {file = "ruff-0.6.4-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:7862f42fc1a4aca1ea3ffe8a11f67819d183a5693b228f0bb3a531f5e40336fc"},
-    {file = "ruff-0.6.4-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:eebe4ff1967c838a1a9618a5a59a3b0a00406f8d7eefee97c70411fefc353617"},
-    {file = "ruff-0.6.4-py3-none-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:932063a03bac394866683e15710c25b8690ccdca1cf192b9a98260332ca93408"},
-    {file = "ruff-0.6.4-py3-none-manylinux_2_17_ppc64.manylinux2014_ppc64.whl", hash = "sha256:50e30b437cebef547bd5c3edf9ce81343e5dd7c737cb36ccb4fe83573f3d392e"},
-    {file = "ruff-0.6.4-py3-none-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:c44536df7b93a587de690e124b89bd47306fddd59398a0fb12afd6133c7b3818"},
-    {file = "ruff-0.6.4-py3-none-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:0ea086601b22dc5e7693a78f3fcfc460cceabfdf3bdc36dc898792aba48fbad6"},
-    {file = "ruff-0.6.4-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0b52387d3289ccd227b62102c24714ed75fbba0b16ecc69a923a37e3b5e0aaaa"},
-    {file = "ruff-0.6.4-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:0308610470fcc82969082fc83c76c0d362f562e2f0cdab0586516f03a4e06ec6"},
-    {file = "ruff-0.6.4-py3-none-musllinux_1_2_armv7l.whl", hash = "sha256:803b96dea21795a6c9d5bfa9e96127cc9c31a1987802ca68f35e5c95aed3fc0d"},
-    {file = "ruff-0.6.4-py3-none-musllinux_1_2_i686.whl", hash = "sha256:66dbfea86b663baab8fcae56c59f190caba9398df1488164e2df53e216248baa"},
-    {file = "ruff-0.6.4-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:34d5efad480193c046c86608dbba2bccdc1c5fd11950fb271f8086e0c763a5d1"},
-    {file = "ruff-0.6.4-py3-none-win32.whl", hash = "sha256:f0f8968feea5ce3777c0d8365653d5e91c40c31a81d95824ba61d871a11b8523"},
-    {file = "ruff-0.6.4-py3-none-win_amd64.whl", hash = "sha256:549daccee5227282289390b0222d0fbee0275d1db6d514550d65420053021a58"},
-    {file = "ruff-0.6.4-py3-none-win_arm64.whl", hash = "sha256:ac4b75e898ed189b3708c9ab3fc70b79a433219e1e87193b4f2b77251d058d14"},
-    {file = "ruff-0.6.4.tar.gz", hash = "sha256:ac3b5bfbee99973f80aa1b7cbd1c9cbce200883bdd067300c22a6cc1c7fba212"},
+    {file = "ruff-0.14.14-py3-none-linux_armv6l.whl", hash = "sha256:7cfe36b56e8489dee8fbc777c61959f60ec0f1f11817e8f2415f429552846aed"},
+    {file = "ruff-0.14.14-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:6006a0082336e7920b9573ef8a7f52eec837add1265cc74e04ea8a4368cd704c"},
+    {file = "ruff-0.14.14-py3-none-macosx_11_0_arm64.whl", hash = "sha256:026c1d25996818f0bf498636686199d9bd0d9d6341c9c2c3b62e2a0198b758de"},
+    {file = "ruff-0.14.14-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f666445819d31210b71e0a6d1c01e24447a20b85458eea25a25fe8142210ae0e"},
+    {file = "ruff-0.14.14-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:3c0f18b922c6d2ff9a5e6c3ee16259adc513ca775bcf82c67ebab7cbd9da5bc8"},
+    {file = "ruff-0.14.14-py3-none-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:1629e67489c2dea43e8658c3dba659edbfd87361624b4040d1df04c9740ae906"},
+    {file = "ruff-0.14.14-py3-none-manylinux_2_17_ppc64.manylinux2014_ppc64.whl", hash = "sha256:27493a2131ea0f899057d49d303e4292b2cae2bb57253c1ed1f256fbcd1da480"},
+    {file = "ruff-0.14.14-py3-none-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:01ff589aab3f5b539e35db38425da31a57521efd1e4ad1ae08fc34dbe30bd7df"},
+    {file = "ruff-0.14.14-py3-none-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:1cc12d74eef0f29f51775f5b755913eb523546b88e2d733e1d701fe65144e89b"},
+    {file = "ruff-0.14.14-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bb8481604b7a9e75eff53772496201690ce2687067e038b3cc31aaf16aa0b974"},
+    {file = "ruff-0.14.14-py3-none-manylinux_2_31_riscv64.whl", hash = "sha256:14649acb1cf7b5d2d283ebd2f58d56b75836ed8c6f329664fa91cdea19e76e66"},
+    {file = "ruff-0.14.14-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:e8058d2145566510790eab4e2fad186002e288dec5e0d343a92fe7b0bc1b3e13"},
+    {file = "ruff-0.14.14-py3-none-musllinux_1_2_armv7l.whl", hash = "sha256:e651e977a79e4c758eb807f0481d673a67ffe53cfa92209781dfa3a996cf8412"},
+    {file = "ruff-0.14.14-py3-none-musllinux_1_2_i686.whl", hash = "sha256:cc8b22da8d9d6fdd844a68ae937e2a0adf9b16514e9a97cc60355e2d4b219fc3"},
+    {file = "ruff-0.14.14-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:16bc890fb4cc9781bb05beb5ab4cd51be9e7cb376bf1dd3580512b24eb3fda2b"},
+    {file = "ruff-0.14.14-py3-none-win32.whl", hash = "sha256:b530c191970b143375b6a68e6f743800b2b786bbcf03a7965b06c4bf04568167"},
+    {file = "ruff-0.14.14-py3-none-win_amd64.whl", hash = "sha256:3dde1435e6b6fe5b66506c1dff67a421d0b7f6488d466f651c07f4cab3bf20fd"},
+    {file = "ruff-0.14.14-py3-none-win_arm64.whl", hash = "sha256:56e6981a98b13a32236a72a8da421d7839221fa308b223b9283312312e5ac76c"},
+    {file = "ruff-0.14.14.tar.gz", hash = "sha256:2d0f819c9a90205f3a867dbbd0be083bee9912e170fd7d9704cc8ae45824896b"},
 ]
 
 [[package]]
@@ -789,18 +682,18 @@ files = [
 
 [[package]]
 name = "sphinx-rtd-theme"
-version = "2.0.0"
-requires_python = ">=3.6"
+version = "3.1.0"
+requires_python = ">=3.8"
 summary = "Read the Docs theme for Sphinx"
 groups = ["doc"]
 dependencies = [
-    "docutils<0.21",
-    "sphinx<8,>=5",
+    "docutils<0.23,>0.18",
+    "sphinx<10,>=6",
     "sphinxcontrib-jquery<5,>=4",
 ]
 files = [
-    {file = "sphinx_rtd_theme-2.0.0-py2.py3-none-any.whl", hash = "sha256:ec93d0856dc280cf3aee9a4c9807c60e027c7f7b461b77aeffed682e68f0e586"},
-    {file = "sphinx_rtd_theme-2.0.0.tar.gz", hash = "sha256:bd5d7b80622406762073a04ef8fadc5f9151261563d47027de09910ce03afe6b"},
+    {file = "sphinx_rtd_theme-3.1.0-py2.py3-none-any.whl", hash = "sha256:1785824ae8e6632060490f67cf3a72d404a85d2d9fc26bce3619944de5682b89"},
+    {file = "sphinx_rtd_theme-3.1.0.tar.gz", hash = "sha256:b44276f2c276e909239a4f6c955aa667aaafeb78597923b1c60babc76db78e4c"},
 ]
 
 [[package]]
@@ -888,7 +781,7 @@ name = "tomli"
 version = "2.0.1"
 requires_python = ">=3.7"
 summary = "A lil' TOML parser"
-groups = ["default", "dev", "lint"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.11\""
 files = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
