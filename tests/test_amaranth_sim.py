@@ -47,6 +47,25 @@ def test_sim_mod_fixture(pytester, file_exists):
     assert not file_exists("*.gtkw")
 
 
+def test_multiple_clocks(pytester, file_exists):
+    """Test that the simulator fixture can accept multiple clocks."""
+    pytester.copy_example("test_multiclk.py")
+
+    # run pytest with the following cmd args
+    result = pytester.runpytest("-v", "--vcds")
+
+    # fnmatch_lines does an assertion internally
+    # result.stdout.fnmatch_lines([
+    #     '*::test_basic[[]*[]] PASSED*',
+    # ])
+
+    # make sure that we get a '0' exit code for the testsuite
+    assert result.ret == 0
+
+    assert file_exists("*.vcd")
+    assert file_exists("*.gtkw")
+
+
 def test_help_message(pytester):
     """Test that help message looks correct."""
     result = pytester.runpytest(

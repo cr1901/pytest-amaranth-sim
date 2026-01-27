@@ -83,22 +83,17 @@ class SimulatorFixture:
         self.sim = Simulator(self.mod)
         self.vcds = cfg.getoption("vcds")
 
-        clks = req.node.get_closest_marker("clks")
-        # There might not be clocks, but if there are, specify them with
-        # @pytest.mark.
         if self.clks:
             if isinstance(self.clks, float):
                 self.sim.add_clock(self.clks)
             elif isinstance(self.clks, dict):
-                raise NotImplementedError("simulation for domains besides "
-                                          "sync is not yet supported")
-                # for domain, clk in clks.iter():
-                #     pass
+                for domain, per in self.clks.items():
+                    self.sim.add_clock(per, domain=domain)
             else:
                 raise ValueError("clks should be a float or dict of floats, "
                                  f"not {type(self.clks)}")
 
-    def run(self, testbenches=[], processes=[]):  # noqa: DOC501
+    def run(self, *, testbenches=[], processes=[]):  # noqa: DOC501
         """Run a simulation using Amaranth's :class:`amaranth.sim.Simulator`.
 
         :meth:`run` is expected to be called as the last statement in a test.
