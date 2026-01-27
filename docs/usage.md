@@ -19,6 +19,16 @@ for controlling Amaranth simulations:
    :exclude-members: pytest_addoption, pytest_make_parametrize_id
 ```
 
+## Miscellaneous
+
+`pytest_amaranth_sim` also provides the following classes, functions, etc
+for working with its fixtures. _Since these are not fixtures, and do not use
+`pytest` hooks, you must import them before use._
+
+```{eval-rst}
+.. automodule:: pytest_amaranth_sim
+```
+
 (how_to_use_fixtures)=
 ### How To Use These Fixtures
 

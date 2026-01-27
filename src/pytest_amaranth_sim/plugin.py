@@ -7,6 +7,9 @@ import pytest
 import in_place
 from amaranth import Elaboratable
 from amaranth.sim import Simulator
+from typing import Coroutine
+
+from ._marker import Testbench
 
 
 def pytest_addoption(parser):  # noqa: D103
@@ -94,7 +97,7 @@ class SimulatorFixture:
                                  f"not {type(self.clks)}")
 
     def run(self, *, testbenches=[], processes=[]):  # noqa: DOC501
-        """Run a simulation using Amaranth's :class:`amaranth.sim.Simulator`.
+        r"""Run a simulation using Amaranth's :class:`amaranth.sim.Simulator`.
 
         :meth:`run` is expected to be called as the last statement in a test.
         The simulator tests a given ``mod`` by driving the given
@@ -105,23 +108,39 @@ class SimulatorFixture:
         See :ref:`how_to_use_fixtures` for examples.
 
         Any exceptions raised within the testbenches and processes given to
-        :meth:`run` will be propagated to the `pytest` test runner. Genereally,
+        :meth:`run` will be propagated to the `pytest` test runner. Generally,
         testbenches and processes should raise :exc:`AssertionError` to
         indicate test failure of a given ``mod``.
 
         Parameters
         ----------
-        testbenches: list of callables
+        testbenches: list of Coroutine or :class:`Testbench`
             List of Amaranth
             :meth:`testbenches <amaranth.sim.Simulator.add_testbench>`
             to add *all at once* before running the simulator.
+
+            The list can be Coroutines, :class:`Testbench`\es, or a mixture.
+            Each "bare" Coroutine will become a
+            :meth:`critical <amaranth.sim.Simulator.add_testbench>` testbench.
         processes: list of callables
             List of Amaranth
             :meth:`processes <amaranth.sim.Simulator.add_processes>`
             to add *all at once* before running the simulator.
+
+        Raises
+        ------
+        :exception:`ValueError`
+            If at least one list element of ``testbenches`` isn't a
+            Coroutine or :class:`Testbench`.
         """
         for t in testbenches:
-            self.sim.add_testbench(t)
+            if isinstance(t, Coroutine):
+                self.sim.add_testbench(t)
+            elif isinstance(t, Testbench):
+                self.sim.add_testbench(t.constructor, background=t.background)
+            else:
+                raise ValueError("clks should be a list of Coroutines and/or"
+                                 f" Testbenches, not {type(self.clks)}")
 
         for p in processes:
             self.sim.add_process(p)
