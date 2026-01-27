@@ -25,6 +25,8 @@ class Testbench:
        tb = Testbench(my_tb, background=True)
     """
 
+    __test__ = False
+
     #: Testbench constructor- i.e. the first argument to
     #: :meth:`~amaranth.sim.Simulator.add_testbench`.
     constructor: Callable[[SimulatorContext], Coroutine]
