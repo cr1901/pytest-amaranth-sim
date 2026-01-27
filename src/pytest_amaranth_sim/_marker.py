@@ -1,7 +1,8 @@
 """Useful marker classes that aren't part of pytest hooks."""
 
 from dataclasses import dataclass
-from typing import Coroutine
+from amaranth.sim import SimulatorContext
+from typing import Callable, Coroutine
 
 
 @dataclass
@@ -26,7 +27,7 @@ class Testbench:
 
     #: Testbench constructor- i.e. the first argument to
     #: :meth:`~amaranth.sim.Simulator.add_testbench`.
-    constructor: Coroutine
+    constructor: Callable[[SimulatorContext], Coroutine]
     #: If ``True``, mark :attr:`constructor` as background when passed to
     #: :meth:`~amaranth.sim.Simulator.add_testbench`.
     background: bool = False

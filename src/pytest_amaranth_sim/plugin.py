@@ -7,7 +7,6 @@ import pytest
 import in_place
 from amaranth import Elaboratable
 from amaranth.sim import Simulator
-from typing import Coroutine
 
 from ._marker import Testbench
 
@@ -112,33 +111,34 @@ class SimulatorFixture:
 
         Parameters
         ----------
-        testbenches: list of Coroutine or :class:`Testbench`
+        testbenches: list of Callable[[SimulatorContext], Coroutine] or :class:`.Testbench`
             List of Amaranth
             :meth:`testbenches <amaranth.sim.Simulator.add_testbench>`
-            to add *all at once* before running the simulator.
+            to add *all at once* before running the simulator. The list can
+            be callables, :class:`.Testbench`\es, or a mixture.
 
-            The list can be Coroutines, :class:`Testbench`\es, or a mixture.
-            Each "bare" Coroutine will become a
-            :meth:`critical <amaranth.sim.Simulator.add_testbench>` testbench.
-        processes: list of callables
+            Each "bare" callable will be passed to
+            :meth:`~amaranth.sim.Simulator.add_testbench` unmodified; such
+            testbenches are implicitly critical.
+        processes: list of Callable[[SimulatorContext], Coroutine]
             List of Amaranth
-            :meth:`processes <amaranth.sim.Simulator.add_processes>`
+            :meth:`processes <amaranth.sim.Simulator.add_process>`
             to add *all at once* before running the simulator.
 
         Raises
         ------
         :exception:`ValueError`
             If at least one list element of ``testbenches`` isn't a
-            Coroutine or :class:`Testbench`.
+            callable or :class:`.Testbench`.
         """
         for t in testbenches:
-            if isinstance(t, Coroutine):
+            if callable(t):
                 self.sim.add_testbench(t)
             elif isinstance(t, Testbench):
                 self.sim.add_testbench(t.constructor, background=t.background)
             else:
-                raise ValueError("clks should be a list of Coroutines and/or"
-                                 f" Testbenches, not {type(self.clks)}")
+                raise ValueError("testbenches should be a list of callables "
+                                 f"and/or Testbenches, not {type(t)}")
 
         for p in processes:
             self.sim.add_process(p)
