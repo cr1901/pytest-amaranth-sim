@@ -65,8 +65,6 @@ class SimulatorFixture:
 
     Raises
     ------
-    :exception:`NotImplementedError`
-        If multiple clock domains are provided.
     :exception:`ValueError`
         If clocks aren't ``None``, :class:`float`, or :class:`dict` of
         :class:`str`: :class:`float`.

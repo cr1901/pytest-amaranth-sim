@@ -16,7 +16,7 @@ class Testbench:
 
     .. testcode::
 
-       from pytest_amaranth_sim.plugin import Testbench
+       from pytest_amaranth_sim import Testbench
 
        async def my_tb(ctx):
            ...
