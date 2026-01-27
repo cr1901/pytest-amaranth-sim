@@ -52,7 +52,7 @@ def test_multiple_clocks(pytester, file_exists):
     pytester.copy_example("test_multiclk.py")
 
     # run pytest with the following cmd args
-    result = pytester.runpytest("-v", "--vcds")
+    result = pytester.runpytest("-v", "-k", "switcher_multi", "--vcds")
 
     # fnmatch_lines does an assertion internally
     result.stdout.fnmatch_lines([
@@ -62,8 +62,22 @@ def test_multiple_clocks(pytester, file_exists):
     # make sure that we get a '0' exit code for the testsuite
     assert result.ret == 0
 
-    assert file_exists("*.vcd")
-    assert file_exists("*.gtkw")
+    assert file_exists("test_clock_switcher_multi[[]fast@12.0*slow@12.5*clocks*[]].vcd")
+    assert file_exists("test_clock_switcher_multi[[]fast@12.0*slow@12.5*clocks*[]].gtkw")
+
+
+def test_background_testbench(pytester, file_exists):
+    """Test that the simulator fixture can accept background testbenches."""
+    pytester.copy_example("test_multiclk.py")
+
+    # run pytest with the following cmd args
+    result = pytester.runpytest("-v", "-k", "switcher_background", "--vcds")
+
+    # make sure that we get a '0' exit code for the testsuite
+    assert result.ret == 0
+
+    assert file_exists("test_clock_switcher_background[[]comb*clocks*[]].vcd")
+    assert file_exists("test_clock_switcher_background[[]comb*clocks*[]].gtkw")
 
 
 def test_help_message(pytester):
