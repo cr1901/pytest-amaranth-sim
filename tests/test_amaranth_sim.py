@@ -55,9 +55,9 @@ def test_multiple_clocks(pytester, file_exists):
     result = pytester.runpytest("-v", "--vcds")
 
     # fnmatch_lines does an assertion internally
-    # result.stdout.fnmatch_lines([
-    #     '*::test_basic[[]*[]] PASSED*',
-    # ])
+    result.stdout.fnmatch_lines([
+        '*::test_clock_switcher_multi[[]fast@12.0*slow@12.5*clocks*[]] PASSED*',
+    ])
 
     # make sure that we get a '0' exit code for the testsuite
     assert result.ret == 0

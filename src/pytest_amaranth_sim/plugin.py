@@ -37,6 +37,9 @@ def pytest_make_parametrize_id(config, val, argname):  # noqa: D103
     if argname in ("clks"):
         if isinstance(val, float):
             return f"{1/val/1000000:04.2f}"
+        if isinstance(val, dict):
+            # No need for sorted(val.items()) since 3.7.
+            return "-".join([f"{k}@{1/v/1000000:04.2f}" for (k, v) in val.items()])
         else:
             return "comb"
     elif isinstance(val, Elaboratable) and argname in ("mod"):
