@@ -26,12 +26,14 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: 3 :: Only",
     "License :: OSI Approved :: BSD License",
 ]
 dependencies = [
     "pytest>=6.2.0",
-    "amaranth>=0.5.0",
+    "amaranth>=0.5.8",
     "in-place>=1.0.0",
 ]
 dynamic = ["version"]
@@ -67,23 +69,10 @@ lint.pycodestyle.max-line-length = 79  # flake8 compat
 source = "scm"
 write_to = "pytest_amaranth_sim/version.txt"
 
-[tool.pdm.dev-dependencies]
-dev = [
-    "pyvcd>=0.4.0",
-    "pytest-sphinx>=0.6.3",
-]
-doc = [
-    "sphinx>=7.1.2",
-    "sphinx-rtd-theme>=2.0.0",
-    "myst-parser>=3.0.1",
-    "sphinx-autobuild>=2021.3.14",
-    "packaging>=24.0",
-]
-
 [tool.pdm.scripts]
 test = { cmd = "pytest", help="run tests" }
-lint = { cmd = "ruff check" }
-doc = "sphinx-build docs/ docs/_build/"
+lint = { cmd = "ruff check", help="lint plugin, tests, and examples" }
+doc = { cmd = "sphinx-build {args} docs/ docs/_build/", help = "build docs, \"-n\" for \"nitpicky\"" }
 # FIXME: pytest-sphinx doesn't catch all of these. Remove when it does.
 doc-test = "sphinx-build -b doctest docs/ docs/_build"
 doc-linkck = "sphinx-build docs/ docs/_linkcheck/ -b linkcheck"
@@ -95,6 +84,17 @@ env = { CARGO_PROFILE_RELEASE_LTO="false" }
 help = "update Ruff linter on MSYS2- work around Rust issue #109797"
 
 [dependency-groups]
+dev = [
+    "pyvcd>=0.4.0",
+    "pytest-sphinx>=0.6.3",
+]
+doc = [
+    "sphinx>=7.1.2",
+    "sphinx-rtd-theme>=2.0.0",
+    "myst-parser>=3.0.1",
+    "sphinx-autobuild>=2021.3.14",
+    "packaging>=24.0",
+]
 lint = [
     "ruff>=0.14.1",
 ]
