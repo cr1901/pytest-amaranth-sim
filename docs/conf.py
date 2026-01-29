@@ -131,6 +131,11 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
+# Links that upset the rate-limiter.
+linkcheck_ignore = [
+    r"https://github.com/amaranth-lang/amaranth/blob/main/amaranth/sim/pysim.py"
+]
+
 
 # -- Options for HTML output ----------------------------------------------
 
