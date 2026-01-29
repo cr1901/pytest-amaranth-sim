@@ -15,9 +15,9 @@ class Mul(Elaboratable):
         self.registered = registered
         self.a = Signal(width)
         self.b = Signal(width)
-        self.o = Signal(2*width)
+        self.o = Signal(2 * width)
 
-    def elaborate(self, plat):  # noqa: D102
+    def elaborate(self, plat):
         m = Module()
 
         if self.registered:
@@ -57,7 +57,7 @@ def case_ids(args):
 
 @pytest.fixture(params=[pytest.param(MulTbArgs())], ids=mul_tb_id)
 def mul_tb(mod, request):
-    """The multiplier testbench proper. Receives arguments via request."""  # noqa: D401, E501
+    """The multiplier testbench proper. Receives arguments via request."""
     async def testbench(sim):
         s = sim
         m = mod
@@ -100,7 +100,7 @@ def test_alternate_inputs(sim, mul_tb):
 @pytest.mark.parametrize(
     "mod,clks,expectation", [
         (Mul(width=1), 1.0 / 12e6, pytest.raises(AssertionError)),
-        (Mul(width=6), 1.0 / 12e6,  does_not_raise())
+        (Mul(width=6), 1.0 / 12e6, does_not_raise())
     ], ids=case_ids)
 def test_alternate_width(sim, mul_tb, expectation):
     """Given the testbench values, check different multiplier widths."""

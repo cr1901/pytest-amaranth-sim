@@ -56,8 +56,12 @@ line-length = 79  # flake8 compat
 lint.extend-select = ["E1", "E2", "E3", "RUF100", "E5", "W", "D", "DOC"]
 lint.pydocstyle.convention = "numpy"
 lint.pycodestyle.max-line-length = 79  # flake8 compat
-# I don't see the need to document tests like they're a public API.
-lint.per-file-ignores = { "tests/**/*.py" = ["D10"], "examples/test_*.py" = ["D10"] }
+
+[tool.ruff.lint.per-file-ignores]
+# I don't see the need to document tests/Sphinx conf like they're a public API.
+"tests/**/*.py" = ["D10"]
+"examples/test_*.py" = ["D10", "D401", "DOC201"]
+"docs/conf.py" = ["D10", "E265", "E303"]
 
 [tool.pdm.version]
 source = "scm"
@@ -78,7 +82,7 @@ doc = [
 
 [tool.pdm.scripts]
 test = { cmd = "pytest", help="run tests" }
-lint = { composite = ["ruff check", "flake8"] }
+lint = { cmd = "ruff check" }
 doc = "sphinx-build docs/ docs/_build/"
 # FIXME: pytest-sphinx doesn't catch all of these. Remove when it does.
 doc-test = "sphinx-build -b doctest docs/ docs/_build"

@@ -56,14 +56,16 @@ def test_multiple_clocks(pytester, file_exists):
 
     # fnmatch_lines does an assertion internally
     result.stdout.fnmatch_lines([
-        '*::test_clock_switcher_multi[[]fast@12.0*slow@12.5*clocks*[]] PASSED*',
+        '*::test_clock_switcher_multi[[]fast@12.0*slow@12.5*clocks*[]] PASSED*',  # noqa: E501
     ])
 
     # make sure that we get a '0' exit code for the testsuite
     assert result.ret == 0
 
-    assert file_exists("test_clock_switcher_multi[[]fast@12.0*slow@12.5*clocks*[]].vcd")
-    assert file_exists("test_clock_switcher_multi[[]fast@12.0*slow@12.5*clocks*[]].gtkw")
+    assert file_exists("test_clock_switcher_multi"
+                       "[[]fast@12.0*slow@12.5*clocks*[]].vcd")
+    assert file_exists("test_clock_switcher_multi"
+                       "[[]fast@12.0*slow@12.5*clocks*[]].gtkw")
 
 
 def test_background_testbench(pytester, file_exists):

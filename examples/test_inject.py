@@ -9,7 +9,7 @@ class Adder(Elaboratable):
         self.b = Signal(width)
         self.o = Signal(width + 1)
 
-    def elaborate(self, plat):  # noqa: D102
+    def elaborate(self, plat):
         m = Module()
 
         m.d.sync += self.o.eq(self.a + self.b)
@@ -19,7 +19,7 @@ class Adder(Elaboratable):
 
 @pytest.fixture
 def testbench(mod, a, b, o):
-    if (a,b,o,mod.width) == (127, 127, 254, 4):
+    if (a, b, o, mod.width) == (127, 127, 254, 4):
         return pytest.skip(reason="inputs too wide")
 
     async def testbench(sim):

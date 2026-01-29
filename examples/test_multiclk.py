@@ -1,8 +1,5 @@
 import pytest
 from amaranth import ClockDomain, Elaboratable, Signal, Module, ClockSignal
-from amaranth.sim import Passive
-from dataclasses import dataclass
-from contextlib import nullcontext as does_not_raise
 
 from pytest_amaranth_sim._marker import Testbench
 
@@ -59,7 +56,7 @@ class Clocks(Elaboratable):
 
 @pytest.fixture
 def clk_tb(mod):
-    """Basic clock multiplexer testbench."""  # noqa: D401
+    """Basic clock multiplexer testbench."""
     async def testbench(sim):
         s = sim
         m = mod
@@ -73,7 +70,7 @@ def clk_tb(mod):
 
 @pytest.fixture
 def clk_drivers(mod):
-    """Directly drive clocks for the clock multiplexer testbench."""  # noqa: D401
+    """Directly drive clocks for the clock multiplexer testbench."""
     def mk_driver(clk, period):
         async def driver(sim):
             s = sim

@@ -36,10 +36,11 @@ def pytest_addoption(parser):  # noqa: D103
 def pytest_make_parametrize_id(config, val, argname):  # noqa: D103
     if argname in ("clks"):
         if isinstance(val, float):
-            return f"{1/val/1000000:04.2f}"
+            return f"{1 / val / 1000000:04.2f}"
         if isinstance(val, dict):
             # No need for sorted(val.items()) since 3.7.
-            return "-".join([f"{k}@{1/v/1000000:04.2f}" for (k, v) in val.items()])
+            return "-".join([f"{k}@{1 / v / 1000000:04.2f}"
+                             for (k, v) in val.items()])
         else:
             return "comb"
     elif isinstance(val, Elaboratable) and argname in ("mod"):
@@ -50,7 +51,7 @@ def pytest_make_parametrize_id(config, val, argname):  # noqa: D103
 
 class SimulatorFixture:
     """Fixture class which drives Amaranth's :doc:`Python simulator <amaranth:simulator>`.
-    
+
     ``SimulatorFixture's`` contructor is private; it's arguments are documented
     for completeness.
 
@@ -67,12 +68,12 @@ class SimulatorFixture:
 
     Raises
     ------
-    :exception:`ValueError`
+    :exception:`Valuerror`
         If clocks aren't ``None``, :class:`float`, or :class:`dict` of
         :class:`str`: :class:`float`.
-    """  #  noqa: E501
+    """  # noqa: E501
 
-    def __init__(self, mod, clks, req, cfg):  # noqa: DOC503 # https://github.com/jsh9/pydoclint/issues/165
+    def __init__(self, mod, clks, req, cfg):
         self.mod = mod
         self.clks = clks
 
@@ -96,14 +97,14 @@ class SimulatorFixture:
                 raise ValueError("clks should be a float or dict of floats, "
                                  f"not {type(self.clks)}")
 
-    def run(self, *, testbenches=[], processes=[]):  # noqa: DOC501
+    def run(self, *, testbenches=[], processes=[]):
         r"""Run a simulation using Amaranth's :class:`amaranth.sim.Simulator`.
 
         :meth:`run` is expected to be called as the last statement in a test.
         The simulator tests a given ``mod`` by driving the given
         :meth:`testbenches <amaranth.sim.Simulator.add_testbench>` and
         :meth:`processes <amaranth.sim.Simulator.add_processes>`.
- 
+
         Testbenches and can be prepared and parameterized in multiple ways.
         See :ref:`how_to_use_fixtures` for examples.
 
@@ -133,7 +134,7 @@ class SimulatorFixture:
         :exception:`ValueError`
             If at least one list element of ``testbenches`` isn't a
             callable or :class:`.Testbench`.
-        """
+        """  # noqa: DOC501, DOC502, E501
         for t in testbenches:
             if callable(t):
                 self.sim.add_testbench(t)
@@ -169,9 +170,9 @@ class SimulatorFixture:
 
 
 @pytest.fixture
-def mod():  # noqa: DOC503  # https://github.com/jsh9/pydoclint/issues/165
+def mod():
     """Fixture representing an Amaranth :ref:`Module <amaranth:lang-modules>`.
-    
+
     If the :func:`sim` fixture is used in a test, either directly or
     indirectly, this fixture must be :ref:`overridden <override fixtures>`
     by the user.
@@ -181,14 +182,14 @@ def mod():  # noqa: DOC503  # https://github.com/jsh9/pydoclint/issues/165
     :exception:`pytest.UsageError`
         If ``mod`` fixture was not overridden when the ``sim`` fixture is used
         in a test, directly or indirectly.
-    """
+    """  # noqa: DOC501, DOC502
     raise pytest.UsageError("User must override `mod` fixture in test- see: https://docs.pytest.org/en/stable/how-to/fixtures.html#overriding-fixtures-on-various-levels")
 
 
 @pytest.fixture
 def sim(mod, clks, request, pytestconfig):
     """Fixture representing an Amaranth `pysim` context.
-    
+
     Parameters
     ----------
     mod: Module
@@ -211,9 +212,9 @@ def sim(mod, clks, request, pytestconfig):
 @pytest.fixture()
 def clks():
     """Fixture representing the clocks used by the :func:`mod` fixture.
-    
+
     The ``clks`` fixture should return either:
-     
+
     * ``None``, indicating a purely combinational module.
     * A :class:`float` representing the clock period of the ``sync`` domain in
       seconds.
