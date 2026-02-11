@@ -44,7 +44,7 @@ Repository = "https://github.com/cr1901/pytest-amaranth-sim"
 amaranth-sim = "pytest_amaranth_sim.plugin"
 
 [tool.pytest.ini_options]
-addopts="--doctest-glob=\"*.md\" --doctest-modules --ignore=examples"
+addopts="--doctest-glob=\"*.md\" --doctest-modules --ignore=examples --ignore=ci"
 pytester_example_dir = "examples"
 pythonpath = [
   "src/",
@@ -67,6 +67,7 @@ lint.pycodestyle.max-line-length = 79  # flake8 compat
 
 [tool.pdm.version]
 source = "scm"
+version_format = "ci.testpypi_version:format_version"
 write_to = "pytest_amaranth_sim/version.txt"
 
 [tool.pdm.scripts]
