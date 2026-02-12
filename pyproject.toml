@@ -44,7 +44,7 @@ Repository = "https://github.com/cr1901/pytest-amaranth-sim"
 amaranth-sim = "pytest_amaranth_sim.plugin"
 
 [tool.pytest.ini_options]
-addopts="--doctest-glob=\"*.md\" --doctest-modules --ignore=examples --ignore=ci"
+addopts="-p no:doctest --ignore=examples --ignore=ci --import-mode=importlib"
 pytester_example_dir = "examples"
 pythonpath = [
   "src/",
@@ -87,7 +87,7 @@ help = "update Ruff linter on MSYS2- work around Rust issue #109797"
 [dependency-groups]
 dev = [
     "pyvcd>=0.4.0",
-    "pytest-sphinx>=0.6.3",
+    "sybil[pytest]>=7.1.1",
 ]
 doc = [
     "sphinx>=7.1.2",

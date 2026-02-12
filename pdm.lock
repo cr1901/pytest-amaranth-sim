@@ -5,7 +5,7 @@
 groups = ["default", "dev", "doc", "lint"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:ec8cd7d9794df9e945b67cac900102969552ccf15abd1d799b0b26ca8b6cd1c8"
+content_hash = "sha256:6cb9e3b742477f4277b7ef18ddffe730e33eb6043a23dd778b86ee3cea6ac312"
 
 [[metadata.targets]]
 requires_python = ">=3.8"
@@ -471,20 +471,6 @@ files = [
 ]
 
 [[package]]
-name = "pytest-sphinx"
-version = "0.6.3"
-requires_python = ">=3.8"
-summary = "Doctest plugin for pytest with support for Sphinx-specific doctest-directives"
-groups = ["dev"]
-dependencies = [
-    "pytest>=8.1.1",
-]
-files = [
-    {file = "pytest_sphinx-0.6.3-py3-none-any.whl", hash = "sha256:856e760e64dfbfc89e362e187d641140a267b97881d3ef8aeefb72cc8438ac40"},
-    {file = "pytest_sphinx-0.6.3.tar.gz", hash = "sha256:3b63c8181b9de6a5e5c9826d1b4dc0c827245bec8e64c9f16f269be08be5ecd5"},
-]
-
-[[package]]
 name = "pytz"
 version = "2024.2"
 summary = "World timezone definitions, modern and historical"
@@ -774,6 +760,33 @@ groups = ["doc"]
 files = [
     {file = "sphinxcontrib-serializinghtml-1.1.5.tar.gz", hash = "sha256:aa5f6de5dfdf809ef505c4895e51ef5c9eac17d0f287933eb49ec495280b6952"},
     {file = "sphinxcontrib_serializinghtml-1.1.5-py2.py3-none-any.whl", hash = "sha256:352a9a00ae864471d3a7ead8d7d79f5fc0b57e8b3f95e9867eb9eb28999b92fd"},
+]
+
+[[package]]
+name = "sybil"
+version = "7.1.1"
+requires_python = ">=3.8"
+summary = "Automated testing for the examples in your code and documentation."
+groups = ["dev"]
+files = [
+    {file = "sybil-7.1.1-py3-none-any.whl", hash = "sha256:e306f47455050665b83340a1d1745009e7baa1c0868f0e7826eada684f652639"},
+    {file = "sybil-7.1.1.tar.gz", hash = "sha256:afcd9faad896bdd7907eaa6df6cff1d63247f740a14f27c297cc08be135b16e2"},
+]
+
+[[package]]
+name = "sybil"
+version = "7.1.1"
+extras = ["pytest"]
+requires_python = ">=3.8"
+summary = "Automated testing for the examples in your code and documentation."
+groups = ["dev"]
+dependencies = [
+    "pytest>=8",
+    "sybil==7.1.1",
+]
+files = [
+    {file = "sybil-7.1.1-py3-none-any.whl", hash = "sha256:e306f47455050665b83340a1d1745009e7baa1c0868f0e7826eada684f652639"},
+    {file = "sybil-7.1.1.tar.gz", hash = "sha256:afcd9faad896bdd7907eaa6df6cff1d63247f740a14f27c297cc08be135b16e2"},
 ]
 
 [[package]]
