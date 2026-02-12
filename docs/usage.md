@@ -34,7 +34,11 @@ for working with its fixtures. _Since these are not fixtures, and do not use
 
 A basic test using this plugin looks something like this:
 
-```
+```python
+import pytest
+from amaranth import Elaboratable, Module
+
+
 class MyMod(Elaboratable):
     def __init__(self, width=4, registered=True):
         ...
@@ -45,6 +49,7 @@ class MyMod(Elaboratable):
         ...
 
         return m
+
 
 @pytest.fixture
 def tb(mod, request):
@@ -61,6 +66,7 @@ def tb(mod, request):
         assert ...
 
     return inner
+
 
 @pytest.mark.parametrize("mod,clks", [(MyMod(), 1.0 / 12e6)])
 def test_tb(sim, tb):

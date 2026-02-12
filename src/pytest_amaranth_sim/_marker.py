@@ -15,14 +15,18 @@ class Testbench:
     :meth:`~amaranth.sim.Simulator.add_testbench` along with your testbench
     constructor.
 
-    .. testcode::
+    ..
+       The sequence of >>> and ... is tragically correct for this example.
+       For the reasoning, see: https://stackoverflow.com/a/41081780
 
-       from pytest_amaranth_sim import Testbench
+    .. doctest::
 
-       async def my_tb(ctx):
-           ...
+       >>> from pytest_amaranth_sim import Testbench
 
-       tb = Testbench(my_tb, background=True)
+       >>> async def my_tb(ctx):
+       ...    ...
+
+       >>> tb = Testbench(my_tb, background=True)
     """
 
     __test__ = False
