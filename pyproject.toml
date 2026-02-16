@@ -95,6 +95,7 @@ doc = [
     "myst-parser>=3.0.1",
     "sphinx-autobuild>=2021.3.14",
     "packaging>=24.0",
+    "sphinx-autofixture>=0.4.1",
 ]
 lint = [
     "ruff>=0.14.1",

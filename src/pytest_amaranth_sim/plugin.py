@@ -58,9 +58,9 @@ class SimulatorFixture:
     Parameters
     ----------
     mod: Module
-        The :func:`module <mod>` fixture.
+        The :fixture:`module <mod>` fixture.
     clks: None or float or dict of str: float
-        The :func:`clock periods <clks>` fixture.
+        The :fixture:`clock periods <clks>` fixture.
     req: ~_pytest.fixtures.FixtureRequest
         The :mod:`pytest` ``request`` fixture.
     cfg: ~_pytest.config.Config
@@ -173,9 +173,9 @@ class SimulatorFixture:
 def mod():
     """Fixture representing an Amaranth :ref:`Module <amaranth:lang-modules>`.
 
-    If the :func:`sim` fixture is used in a test, either directly or
+    If the :fixture:`sim` fixture is used in a test, either directly or
     indirectly, this fixture must be :ref:`overridden <override fixtures>`
-    by the user.
+    by the user. The overridden fixture should return an Amaranth Module.
 
     Raises
     ------
@@ -188,30 +188,30 @@ def mod():
 
 @pytest.fixture
 def sim(mod, clks, request, pytestconfig):
-    """Fixture representing an Amaranth `pysim` context.
+    """Fixture representing an Amaranth :class:`pysim <amaranth.sim.Simulator>` context.
 
     Parameters
     ----------
     mod: Module
-        The :func:`module <mod>` fixture.
+        The :fixture:`module <mod>` fixture.
     clks: float or dict of str: float
-        The :func:`clock periods <clks>` fixture.
+        The :fixture:`clock periods <clks>` fixture.
     request: ~_pytest.fixtures.FixtureRequest
         The :mod:`pytest` ``request`` fixture.
     pytestconfig: ~_pytest.config.Config
-        The :mod:`pytest` :func:`~_pytest.fixtures.pytestconfig` fixture.
+        The :mod:`pytest` :fixture:`~_pytest.fixtures.pytestconfig` fixture.
 
     Returns
     -------
     :class:`SimulatorFixture`
-    """
+    """  # noqa: E501
     simfix = SimulatorFixture(mod, clks, request, pytestconfig)
     return simfix
 
 
 @pytest.fixture()
 def clks():
-    """Fixture representing the clocks used by the :func:`mod` fixture.
+    """Fixture representing the clocks used by the :fixture:`mod` fixture.
 
     The ``clks`` fixture should return either:
 
@@ -219,12 +219,12 @@ def clks():
     * A :class:`float` representing the clock period of the ``sync`` domain in
       seconds.
     * A :class:`dict` with :class:`str` keys and :class:`float` values. The
-      keys name each clock domain used by the :func:`mod` fixture (and thus
-      available to :func:`sim`). Each value is the clock period of the named
+      keys name each clock domain used by the :fixture:`mod` fixture (and thus
+      available to :fixture:`sim`). Each value is the clock period of the named
       clock in seconds.
 
     This fixture is expected to be :ref:`overridden <override fixtures>` by
-    the user if the :func:`mod` fixture is clocked.
+    the user if the :fixture:`mod` fixture is clocked.
 
     Returns
     -------

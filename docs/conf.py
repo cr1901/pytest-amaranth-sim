@@ -15,6 +15,8 @@ import os
 import importlib.metadata
 from packaging.version import Version
 
+from docutils.nodes import substitution_reference
+
 try:
     sa_ver = Version(importlib.metadata.version("pytest-amaranth-sim"))
     am_ver = Version(importlib.metadata.version("amaranth"))
@@ -41,6 +43,25 @@ release = sa_ver.public
 sys.path.append(os.path.abspath('../src'))
 
 
+def object_description_transform_handler(app, domain, objtype, contentnode):
+    if objtype in ("fixture",):
+        nbsps = []
+
+        for c in contentnode.traverse():
+            if isinstance(c, substitution_reference) and \
+                c.get("refname", "") in ("nbsp",):
+                nbsps.append(c)
+
+        for n in nbsps:
+            n.replace_self([])
+
+
+# Remove when https://github.com/sphinx-toolbox/sphinx-autofixture/issues/93
+# is addressed.
+def setup(app):
+    app.connect('object-description-transform',
+                object_description_transform_handler)
+
 
 # -- General configuration ------------------------------------------------
 
@@ -58,7 +79,8 @@ extensions = [
     "sphinx_rtd_theme",
     "sphinx.ext.doctest",
     "sphinx.ext.napoleon",
-    "sphinx.ext.todo"
+    "sphinx.ext.todo",
+    "sphinx_autofixture"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -130,11 +152,6 @@ pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
-
-# Links that upset the rate-limiter.
-linkcheck_ignore = [
-    r"https://github.com/amaranth-lang/amaranth/blob/main/amaranth/sim/pysim.py"
-]
 
 
 # -- Options for HTML output ----------------------------------------------
