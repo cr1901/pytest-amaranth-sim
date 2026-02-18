@@ -111,7 +111,7 @@ multiple sources:
           # Use s object to drive simulation forward.
           await s.tick()
 
-          # Supplying arguments to the TB generator customizes TB behavior.
+          # Supplying arguments from the request fixture customizes TB behavior.
           if tick_twice:
               await s.tick()
 
@@ -145,7 +145,7 @@ multiple sources:
           # Use s object to drive simulation forward.
           await s.tick()
 
-          # Supplying arguments to the TB generator customizes TB behavior.
+          # Supplying arguments from an external fixture customizes TB behavior.
           if tick_twice:
               await s.tick()
 
@@ -215,7 +215,7 @@ multiple sources:
           # Use s object to drive simulation forward.
           await s.tick()
 
-          # Supplying arguments to the TB generator customizes TB behavior.
+          # Supplying bound variables to the inner function customizes TB behavior.
           if tick_twice:
               await s.tick()
 
