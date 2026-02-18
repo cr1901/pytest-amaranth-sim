@@ -1,3 +1,5 @@
+"""Conftest file to bring in Sybil doc checking."""
+
 from sybil import Sybil
 from sybil.parsers.myst import (
     DocTestDirectiveParser as MarkdownDocTestParser,
