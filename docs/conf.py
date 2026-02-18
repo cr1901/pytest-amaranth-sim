@@ -18,7 +18,7 @@ from packaging.version import Version
 from docutils.nodes import substitution_reference
 
 try:
-    sa_ver = Version(importlib.metadata.version("pytest-amaranth-sim"))
+    pas_ver = Version(importlib.metadata.version("pytest-amaranth-sim"))
     am_ver = Version(importlib.metadata.version("amaranth"))
 except importlib.metadata.PackageNotFoundError as e:
     msg = "run \"pdm install --dev -G dev -G doc\" before building docs"
@@ -34,8 +34,8 @@ else:
     am_ver = f"v{am_ver.public}"
 
 # https://github.com/amaranth-lang/amaranth/commit/e356ee2cac1f4b12339cd1a16f328510e6407b87
-version = str(sa_ver).replace(".editable", "")
-release = sa_ver.public
+version = str(pas_ver).replace(".editable", "")
+release = pas_ver.public
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -152,6 +152,11 @@ pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+linkcheck_ignore = [
+    r"^https://github.com/[^/]+/[^/]+/blob/.*",  # Upsets a rate-limiter.
+    r"^https://gtkwave.sourceforge.net/",  # 403
+]
 
 
 # -- Options for HTML output ----------------------------------------------
