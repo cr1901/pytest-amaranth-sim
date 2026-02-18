@@ -99,7 +99,7 @@ multiple sources:
 
   ```python
   @pytest.fixture(params=[False, True], ids=["once", "twice"])
-  def params_from_fixture_tb(mod, request)
+  def params_from_fixture_tb(mod, request):
       tick_twice = request.param
 
       async def inner(sim):
@@ -135,7 +135,7 @@ multiple sources:
 
 
   @pytest.fixture
-  def params_from_other_fixture_tb(mod, tick_twice_fixture)
+  def params_from_other_fixture_tb(mod, tick_twice_fixture):
       async def inner(sim):
           s = sim
           m = mod
