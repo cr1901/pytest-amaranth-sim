@@ -69,6 +69,7 @@ jobs:
 
   publish-test:
     needs: build
+    if: ${{ github.repository == 'cr1901/pytest-amaranth-sim' && github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     environment:
       name: publish
@@ -88,8 +89,8 @@ jobs:
         repository-url: https://test.pypi.org/legacy/
 
   publish:
-    needs: publish-test
-    if: ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags/') }}
+    needs: build
+    if: ${{ github.repository == 'cr1901/pytest-amaranth-sim' && github.event_name == 'push' && contains(github.ref, 'refs/tags/v') }}
     runs-on: ubuntu-latest
     environment:
       name: publish
@@ -101,5 +102,6 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: dist
+        path: dist/
     - name: Publish package to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
