@@ -32,6 +32,7 @@ for working with its fixtures. _Since these are not fixtures, and do not use
 (how_to_use_fixtures)=
 ### How To Use These Fixtures
 
+(basic_test)=
 A basic test using this plugin looks something like this:
 
 ```python
@@ -94,15 +95,140 @@ By using inner functions, testbenches and processes can be customized from
 multiple sources:
 
 * The [`request` fixture](https://docs.pytest.org/en/stable/reference/reference.html#std-fixture-request).
-  This is useful when paired with [`pytest.mark.parametrize`](https://docs.pytest.org/en/stable/how-to/parametrize.html#pytest-mark-parametrize-parametrizing-test-functions) or [indirect parameterization](https://docs.pytest.org/en/stable/example/parametrize.html#indirect-parametrization).
-* From other fixtures when parameterizing tests [directly](https://docs.pytest.org/en/stable/how-to/fixtures.html#override-a-fixture-with-direct-test-parametrization).
-* Direct input arguments to the outer function. This is useful when outer
-  isn't a fixture. The outer function would be invoked inside a test body
-  (`test_tb` in the above snippet) and return your testbenches and processes
-  to be passed to `sim.run()`.
+  This is useful when paired with [`pytest.mark.parametrize`](https://docs.pytest.org/en/stable/how-to/parametrize.html#pytest-mark-parametrize-parametrizing-test-functions) or [indirect parameterization](https://docs.pytest.org/en/stable/example/parametrize.html#indirect-parametrization):
+
+  ```python
+  @pytest.fixture(params=[False, True], ids=["once", "twice"])
+  def params_from_fixture_tb(mod, request)
+      tick_twice = request.param
+
+      async def inner(sim):
+          s = sim
+          m = mod
+
+          ...
+
+          # Use s object to drive simulation forward.
+          await s.tick()
+
+          # Supplying arguments to the TB generator customizes TB behavior.
+          if tick_twice:
+              await s.tick()
+
+          # Assert statements to test m.
+          assert ...
+
+      return inner
+
+
+  @pytest.mark.parametrize("mod,clks", [(MyMod(), 1.0 / 12e6)])
+  def test_params_from_fixture_tb(sim, mod, params_from_fixture_tb):
+      sim.run(testbenches=[params_from_fixture_tb])
+  ```
+
+* From other fixtures when parameterizing tests [directly](https://docs.pytest.org/en/stable/how-to/fixtures.html#override-a-fixture-with-direct-test-parametrization):
+
+  ```python
+  @pytest.fixture
+  def tick_twice_fixture():
+    return False
+
+
+  @pytest.fixture
+  def params_from_other_fixture_tb(mod, tick_twice_fixture)
+      async def inner(sim):
+          s = sim
+          m = mod
+
+          ...
+
+          # Use s object to drive simulation forward.
+          await s.tick()
+
+          # Supplying arguments to the TB generator customizes TB behavior.
+          if tick_twice:
+              await s.tick()
+
+          # Assert statements to test m.
+          assert ...
+
+      return inner
+
+
+  @pytest.mark.parametrize("mod,clks", [(MyMod(), 1.0 / 12e6)])
+  @pytest.mark.parametrize("tick_twice_fixture", [True, False])
+  def test_params_from_other_fixture_tb(sim, mod, params_from_other_fixture_tb):
+      sim.run(testbenches=[params_from_other_fixture_tb])
+  ```
+
+* Direct input arguments to the outer function. This is useful when the outer
+  function isn't a fixture, _and is very similar to the direct test
+  parameterization above_. The outer function would be invoked inside a test
+  body (`direct_arg_tb` in the below snippet) and return your testbenches and
+  processes to be passed to `sim.run()`:
+
+  ```python
+  def direct_arg_tb(mod, tick_twice=False):
+      async def inner(sim):
+          s = sim
+          m = mod
+
+          ...
+
+          # Use s object to drive simulation forward.
+          await s.tick()
+
+          # Supplying arguments to the TB generator customizes TB behavior.
+          if tick_twice:
+              await s.tick()
+
+          # Assert statements to test m.
+          assert ...
+
+      return inner
+
+
+  @pytest.mark.parametrize("mod,clks", [(MyMod(), 1.0 / 12e6)])
+  @pytest.mark.parametrize("tick_twice", [True, False])
+  def test_direct_arg_tb(sim, mod, tick_twice):
+      tb = direct_arg_tb(mod, tick_twice)
+
+      sim.run(testbenches=[tb])
+  ```
+
+(inline_test)=
 * If your given test body has enough fixtures and parameterization, the test
   itself can be the outer function, and testbenches and processes can be
   defined in-line in the test body!
+
+
+  ```python
+  @pytest.mark.parametrize("mod,clks", [(MyMod(), 1.0 / 12e6)])
+  @pytest.mark.parametrize("tick_twice", [True, False])
+  def test_inline_tb(sim, mod, tick_twice):
+      async def inner(sim):
+          s = sim
+          m = mod
+
+          ...
+
+          # Use s object to drive simulation forward.
+          await s.tick()
+
+          # Supplying arguments to the TB generator customizes TB behavior.
+          if tick_twice:
+              await s.tick()
+
+          # Assert statements to test m.
+          assert ...
+
+      sim.run(testbenches=[inner])
+  ```
+
+  **Note the similarities of each inner function, from the [basic](basic_test) example
+  to the [inline](inline_test) example**. How to customize your testbenches is
+  at least partially a matter of preference. I would start with whatever seems
+  quickest to implement and adapt as you flesh out your test suite.
 
 ## Command Line Options
 
